@@ -3,6 +3,7 @@ from qiskit import QuantumCircuit
 
 
 class Night:
+    
     def __init__(self, active_players, roles, witch_power, couple = None):
         
         self.qc = QuantumCircuit()
@@ -60,7 +61,14 @@ class Night:
     
         return self.roles_list[player_index]
     
-    def Savior():
+    def Savior(self, player_index):
+
+        if self.roles_list[player_index] == None :
+            raise ValueError("Trying to cleanse a dead player")
+    
+        if player_index in self.endangered_players:
+            self.qc.reset(player_index)
+
         return
 
             
