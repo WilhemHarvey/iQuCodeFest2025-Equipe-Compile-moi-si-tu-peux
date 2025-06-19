@@ -20,13 +20,6 @@ class Night:
         self.small_attack = np.pi / 3
         self.heal = -np.pi / 3
 
-    def cupid(self, players_to_marry):
-        
-        self.in_love = players_to_marry
-
-        return
-
-
     def Werewolf(self, attack_player_index):
 
         if self.roles_list[attack_player_index] == None:
