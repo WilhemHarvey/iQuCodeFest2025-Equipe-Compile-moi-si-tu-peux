@@ -9,17 +9,16 @@ class Night:
         self.qc = QuantumCircuit()
 
         self.roles_list = roles
-
         self.endangered_players = []
 
         self.in_love = couple
+        self.lover_in_danger = None
+
         self.witch_ability = witch_power
 
         self.big_attack = 2 * np.pi / 3
         self.small_attack = np.pi / 3
         self.heal = -np.pi / 3
-
-        self.lover_in_danger = None
 
     def cupid(self, players_to_marry):
 
