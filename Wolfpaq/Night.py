@@ -19,7 +19,3 @@ class Night:
 
         elif True:
             pass
-
-
-        
-
