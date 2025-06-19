@@ -1,5 +1,6 @@
 import numpy as np
 from qiskit import transpile
+from utils import run_circuit
 
 # Visualization of the problem graph
 import matplotlib.pyplot as plt
@@ -53,16 +54,11 @@ class Day:
         self.couple = couple
 
     def night_measures(self):
-        simulator = AerSimulator()
-
-        qc = transpile(self.night_circuit, simulator)
-
-        result = simulator.run(qc, shots=1).result()
-        counts = result.get_counts()
-        res_bit_string = counts.keys()[0]
+    
+        res_bitstring = run_circuit(self.night_circuit)
 
         killed_players = []
-        for player, faith in zip(res_bit_string, endangered_players):
+        for player, faith in zip(res_bitstring, self.endangered_players):
             if faith == "1":
                 killed_players.append(player)
                 self.roles[player] = None
@@ -75,33 +71,26 @@ class Day:
         qc = QuantumCircuit(1)
         qc.rx(2 * np.arcsin(np.sqrt(0.9)), 0)
 
-        if couple is not None:
-            if player_to_kill in couple:
+        if self.couple is not None:
+            if player_to_kill in self.couple:
                 new_qc = QuantumCircuit(2)
                 new_qc.append(qc, [0])
                 new_qc.h(0)
                 new_qc.cx(0, 1)
                 qc = new_qc
 
-        qc = transpile(self.night_circuit, simulator)
-
-        result = simulator.run(qc, shots=1).result()
-        counts = result.get_counts()
-        res_bit_string = counts.keys()[0]
+        res_bitstring = run_circuit(qc)
 
         killed_players = []
 
-        for player, faith in zip(res_bit_string, endangered_players):
+        for player, faith in zip(res_bitstring, self.endangered_players):
             if faith == "1":
                 killed_players.append(player)
                 self.roles[player] = None
 
         return killed_players, self.roles
 
-
-
-
-    def vote(ballot: int):
+def vote(ballot: int):
 
         circuit = QuantumCircuit(1)
 
