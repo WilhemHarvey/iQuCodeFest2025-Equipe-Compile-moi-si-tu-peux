@@ -42,10 +42,12 @@ class Day:
         night_circuit: QuantumCircuit,
         endangered_players: list,
         roles: list,
+        couple: None,
     ):
         self.night_circuit = night_circuit
         self.roles = roles
         self.endangered_players = endangered_players
+        self.couple = couple
 
         def night_measures(self):
             simulator = AerSimulator()
@@ -63,3 +65,6 @@ class Day:
                     self.roles[player] = None
 
             return killed_players, self.roles
+
+        def hunter(self):
+            pass
