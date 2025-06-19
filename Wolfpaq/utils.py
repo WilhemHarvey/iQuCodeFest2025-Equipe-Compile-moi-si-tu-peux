@@ -30,16 +30,15 @@ from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 from qiskit_aer import AerSimulator
 
 
-
-def run_circuit(circuit: QuantumCircuit)-> str:
+def run_circuit(circuit: QuantumCircuit) -> str:
     """
-    This util function measure all of the qubits of the given circuit only once, 
+    This util function measure all of the qubits of the given circuit only once,
     and return the bit string containing the result.
 
     Args:
         circuit (QuantumCircuit): the quantum circuit to measure
 
-    Returns: 
+    Returns:
         str: the bit string obtained after the measure
     """
     circuit.measure_all()
@@ -50,6 +49,6 @@ def run_circuit(circuit: QuantumCircuit)-> str:
 
     result = simulator.run(qc, shots=1).result()
     counts = result.get_counts()
-    res_bit_string = counts.keys()[0]
+    res_bitstring = counts.keys()[0]
 
-    return res_bit_string
+    return res_bitstring

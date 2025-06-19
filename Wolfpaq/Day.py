@@ -1,5 +1,6 @@
 import numpy as np
 from qiskit import transpile
+from utils import run_circuit
 
 # Visualization of the problem graph
 import matplotlib.pyplot as plt
@@ -36,6 +37,9 @@ from qiskit_ibm_runtime.fake_provider import FakeNairobiV2  # , FakeQuebec
 from qiskit.visualization import plot_histogram
 
 
+from utils import run_circuit
+
+
 class Day:
     def __init__(
         self,
@@ -49,48 +53,66 @@ class Day:
         self.endangered_players = endangered_players
         self.couple = couple
 
-        def night_measures(self):
-            simulator = AerSimulator()
+    def night_measures(self):
+    
+        res_bitstring = run_circuit(self.night_circuit)
 
-            qc = transpile(self.night_circuit, simulator)
+        killed_players = []
+        for player, faith in zip(res_bitstring, self.endangered_players):
+            if faith == "1":
+                killed_players.append(player)
+                self.roles[player] = None
 
-            result = simulator.run(qc, shots=1).result()
-            counts = result.get_counts()
-            res_bit_string = counts.keys()[0]
+        return killed_players, self.roles
 
-            killed_players = []
-            for player, faith in zip(res_bit_string, endangered_players):
-                if faith == "1":
-                    killed_players.append(player)
-                    self.roles[player] = None
+    def hunter(self, player_to_kill: int):
+        simulator = AerSimulator()
 
-            return killed_players, self.roles
+        qc = QuantumCircuit(1)
+        qc.rx(2 * np.arcsin(np.sqrt(0.9)), 0)
 
-        def hunter(self, player_to_kill: int):
-            simulator = AerSimulator()
+        if self.couple is not None:
+            if player_to_kill in self.couple:
+                new_qc = QuantumCircuit(2)
+                new_qc.append(qc, [0])
+                new_qc.h(0)
+                new_qc.cx(0, 1)
+                qc = new_qc
 
-            qc = QuantumCircuit(1)
-            qc.rx(2 * np.arcsin(np.sqrt(0.9)), 0)
+        res_bitstring = run_circuit(qc)
 
-            if couple is not None:
-                if player_to_kill in couple:
-                    new_qc = QuantumCircuit(2)
-                    new_qc.append(qc, [0])
-                    new_qc.h(0)
-                    new_qc.cx(0, 1)
-                    qc = new_qc
+        killed_players = []
 
-            qc = transpile(self.night_circuit, simulator)
+        for player, faith in zip(res_bitstring, self.endangered_players):
+            if faith == "1":
+                killed_players.append(player)
+                self.roles[player] = None
 
-            result = simulator.run(qc, shots=1).result()
-            counts = result.get_counts()
-            res_bit_string = counts.keys()[0]
+        return killed_players, self.roles
 
-            killed_players = []
+def vote(self, ballot: int)-> bool:
+    """
+    Decides if the voted player dies or not.
 
-            for player, faith in zip(res_bit_string, endangered_players):
-                if faith == "1":
-                    killed_players.append(player)
-                    self.roles[player] = None
+    Args:
+        ballot (int): the position of the voted player in the players array
 
-            return killed_players, self.roles
+    returns: 
+        bool: True if the player has been killed, else False
+    
+    """
+
+    circuit = QuantumCircuit(1)
+
+    theta = np.pi*2/3
+    circuit.rx(theta)
+
+    result_bit = run_circuit(circuit)
+
+    if result_bit == '1': 
+        self.roles[ballot] = None
+        return True
+
+        
+
+
