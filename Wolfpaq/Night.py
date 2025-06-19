@@ -3,21 +3,14 @@ from qiskit import QuantumCircuit
 
 
 class Night:
-    def __init__(
-        self,
-        active_players,
-        roles,
-        witch_power,
-        couple=None,
-        first_night=False,
-    ):
+
+    def __init__(self, active_players, roles, witch_power, couple=None):
 
         self.qc = QuantumCircuit()
 
-        self.alive = active_players
         self.roles_list = roles
+
         self.endangered_players = []
-        self.couple = couple
 
         self.in_love = couple
         self.witch_ability = witch_power
@@ -26,7 +19,14 @@ class Night:
         self.small_attack = np.pi / 3
         self.heal = -np.pi / 3
 
-    def Werewolf(self, attack_player=None):
+    def Werewolf(self, attack_player_index):
+
+        if self.roles_list[attack_player_index] == None:
+            raise ValueError("Trying to kill a dead player")
+
+        self.qc.rx(self.big_attack, 0)
+
+        self.endangered_players.append(attack_player_index)
 
         return
 
@@ -48,6 +48,7 @@ class Night:
         ):
 
             if attack_player_index not in self.endangered_players:
+
                 attack_qc = QuantumCircuit(2)
                 attack_qc.rx(self.small_attack / 3, 1)
                 self.qc.append(attack_qc, [0, 1])
@@ -60,6 +61,12 @@ class Night:
                 raise ValueError("error with attack_player_index")
 
         return
+
+    def Clairvoyante(self, player_index):
+        if self.roles_list[player_index] == None:
+            raise ValueError("Trying to uncover the role of a dead player")
+
+        return self.roles_list[player_index]
 
     def thief(self, player_to_steal):
         stealer = np.argwhere(self.roles == "thief")[0][0]
@@ -91,3 +98,13 @@ class Night:
             self.roles[stealer],
         )
         return self.roles
+
+    def Savior(self, player_index):
+
+        if self.roles_list[player_index] == None:
+            raise ValueError("Trying to cleanse a dead player")
+
+        if player_index in self.endangered_players:
+            self.qc.reset(player_index)
+
+        return

@@ -37,6 +37,9 @@ from qiskit_ibm_runtime.fake_provider import FakeNairobiV2  # , FakeQuebec
 from qiskit.visualization import plot_histogram
 
 
+from utils import run_circuit
+
+
 class Day:
     def __init__(
         self,
@@ -51,6 +54,7 @@ class Day:
         self.couple = couple
 
     def night_measures(self):
+    
         res_bitstring = run_circuit(self.night_circuit)
 
         killed_players = []
@@ -85,3 +89,30 @@ class Day:
                 self.roles[player] = None
 
         return killed_players, self.roles
+
+def vote(self, ballot: int)-> bool:
+    """
+    Decides if the voted player dies or not.
+
+    Args:
+        ballot (int): the position of the voted player in the players array
+
+    returns: 
+        bool: True if the player has been killed, else False
+    
+    """
+
+    circuit = QuantumCircuit(1)
+
+    theta = np.pi*2/3
+    circuit.rx(theta)
+
+    result_bit = run_circuit(circuit)
+
+    if result_bit == '1': 
+        self.roles[ballot] = None
+        return True
+
+        
+
+
