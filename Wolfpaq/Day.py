@@ -54,7 +54,7 @@ class Day:
         self.couple = couple
 
     def night_measures(self):
-    
+
         res_bitstring = run_circuit(self.night_circuit)
 
         killed_players = []
@@ -66,7 +66,6 @@ class Day:
         return killed_players, self.roles
 
     def hunter(self, player_to_kill: int):
-        simulator = AerSimulator()
 
         qc = QuantumCircuit(1)
         qc.rx(2 * np.arcsin(np.sqrt(0.9)), 0)
@@ -90,29 +89,27 @@ class Day:
 
         return killed_players, self.roles
 
-def vote(self, ballot: int)-> bool:
-    """
-    Decides if the voted player dies or not.
+    def vote(self, ballot: int) -> bool:
+        """
+        Decides if the voted player dies or not.
 
-    Args:
-        ballot (int): the position of the voted player in the players array
+        Args:
+            ballot (int): the position of the voted player in the players array
 
-    returns: 
-        bool: True if the player has been killed, else False
-    
-    """
+        returns:
+            bool: True if the player has been killed, else False
 
-    circuit = QuantumCircuit(1)
+        """
 
-    theta = np.pi*2/3
-    circuit.rx(theta)
+        circuit = QuantumCircuit(1)
 
-    result_bit = run_circuit(circuit)
+        theta = np.pi * 2 / 3
+        circuit.rx(theta)
 
-    if result_bit == '1': 
-        self.roles[ballot] = None
-        return True
+        result_bit = run_circuit(circuit)
 
-        
+        if result_bit == "1":
+            self.roles[ballot] = None
+            return True, self.roles
 
-
+        return False, self.roles
