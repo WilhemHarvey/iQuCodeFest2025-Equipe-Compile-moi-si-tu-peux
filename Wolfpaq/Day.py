@@ -1,4 +1,5 @@
 import numpy as np
+from qiskit import transpile
 
 # Visualization of the problem graph
 import matplotlib.pyplot as plt
@@ -45,3 +46,20 @@ class Day:
         self.night_circuit = night_circuit
         self.roles = roles
         self.endangered_players = endangered_players
+
+        def night_measures(self):
+            simulator = AerSimulator()
+
+            qc = transpile(self.night_circuit, simulator)
+
+            result = simulator.run(qc, shots=1).result()
+            counts = result.get_counts()
+            res_bit_string = counts.keys()[0]
+
+            killed_players = []
+            for player, faith in zip(res_bit_string, endangered_players):
+                if faith == "1":
+                    killed_players.append(player)
+                    self.roles[player] = None
+
+            return killed_players, self.roles
