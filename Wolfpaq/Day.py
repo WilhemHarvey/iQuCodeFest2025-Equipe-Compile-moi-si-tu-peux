@@ -44,3 +44,4 @@ class Day:
     ):
         self.night_circuit = night_circuit
         self.roles = roles
+        self.endangered_players = endangered_players
