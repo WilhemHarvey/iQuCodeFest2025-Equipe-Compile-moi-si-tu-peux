@@ -90,11 +90,29 @@ class Day:
 
         return killed_players, self.roles
 
-def vote(ballot: int):
+def vote(self, ballot: int)-> bool:
+    """
+    Decides if the voted player dies or not.
 
-        circuit = QuantumCircuit(1)
+    Args:
+        ballot (int): the position of the voted player in the players array
 
-        theta = np.pi*2/3
-        circuit.rx(theta)
+    returns: 
+        bool: True if the player has been killed, else False
+    
+    """
 
-        result_bit = run_circuit(circuit)
+    circuit = QuantumCircuit(1)
+
+    theta = np.pi*2/3
+    circuit.rx(theta)
+
+    result_bit = run_circuit(circuit)
+
+    if result_bit == '1': 
+        self.roles[ballot] = None
+        return True
+
+        
+
+
