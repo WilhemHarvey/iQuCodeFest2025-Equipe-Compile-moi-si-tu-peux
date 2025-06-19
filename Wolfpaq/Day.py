@@ -66,5 +66,31 @@ class Day:
 
             return killed_players, self.roles
 
-        def hunter(self):
-            pass
+        def hunter(self, player_to_kill: int):
+            simulator = AerSimulator()
+
+            qc = QuantumCircuit(1)
+            qc.rx(2 * np.arcsin(np.sqrt(0.9)), 0)
+
+            if couple is not None:
+                if player_to_kill in couple:
+                    new_qc = QuantumCircuit(2)
+                    new_qc.append(qc, [0])
+                    new_qc.h(0)
+                    new_qc.cx(0, 1)
+                    qc = new_qc
+
+            qc = transpile(self.night_circuit, simulator)
+
+            result = simulator.run(qc, shots=1).result()
+            counts = result.get_counts()
+            res_bit_string = counts.keys()[0]
+
+            killed_players = []
+
+            for player, faith in zip(res_bit_string, endangered_players):
+                if faith == "1":
+                    killed_players.append(player)
+                    self.roles[player] = None
+
+            return killed_players, self.roles
