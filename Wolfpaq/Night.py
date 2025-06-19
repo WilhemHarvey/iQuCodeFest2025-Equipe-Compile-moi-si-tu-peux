@@ -108,3 +108,13 @@ class Night:
             self.qc.reset(player_index)
 
         return
+    
+    def cupid(self, players_to_marry):
+        self.in_love = players_to_marry
+
+    def finish_night(self):
+
+        night_circuit = self.qc.cx(self.in_love[0], self.in_love[1])
+
+
+        return night_circuit
