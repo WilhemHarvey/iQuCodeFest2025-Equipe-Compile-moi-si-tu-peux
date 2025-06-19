@@ -66,7 +66,6 @@ class Day:
         return killed_players, self.roles
 
     def hunter(self, player_to_kill: int):
-        simulator = AerSimulator()
 
         qc = QuantumCircuit(1)
         qc.rx(2 * np.arcsin(np.sqrt(0.9)), 0)
@@ -111,5 +110,6 @@ class Day:
 
         if result_bit == "1":
             self.roles[ballot] = None
-            return True
-        return False
+            return True, self.roles
+
+        return False, self.roles
