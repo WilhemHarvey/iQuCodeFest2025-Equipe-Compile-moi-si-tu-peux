@@ -21,7 +21,7 @@ class Night:
         self.heal = -np.pi / 3
 
     def cupid(self, players_to_marry):
-
+        
         self.in_love = players_to_marry
 
         return
@@ -42,9 +42,6 @@ class Night:
         return
     
     def Witch(self, save_attacked_player = False, attack_player_index = None):
-
-        if attack_player not in self.alive:
-            raise ValueError("Trying to kill a dead player")
 
         if save_attacked_player == True and self.witch_ability[0] != False:
             self.qc.rx(self.heal, 0)
