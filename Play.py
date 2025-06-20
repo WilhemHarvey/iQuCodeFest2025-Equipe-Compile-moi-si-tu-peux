@@ -185,8 +185,7 @@ class Play:
         day = Day(self.N_circuit, self.N_endangered_players, self.active_player_roles,self.couple)
 
         # Voting phase
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
         votes = {}
         for player in self.players.keys():
             vote = str(input(f"{player}, who do you want to vote for? (Enter player name): ").strip())
@@ -194,15 +193,12 @@ class Play:
                 votes[vote] = votes.get(vote, 0) + 1
             else:
                 print(f"{vote} is not a valid player.")
-=======
-=======
->>>>>>> Stashed changes
+
         voted_player_name = str(
             input("Game master, who does the village vote for? (Enter player name): ")
         )
         voted_player_index = self.name2index(voted_player_name)
         voted_player_role = self.active_player_roles[voted_player_index]
-<<<<<<< Updated upstream
 
         voted_player_is_killed, self.active_player_roles = Day.vote(Day, voted_player_index)
 
@@ -215,7 +211,6 @@ class Play:
                 dead_players, self.roles = Day.hunter(Day,hunter_victim_index)
                 if len(dead_players) == 1 :
                     print(f"\n {hunter_victim_name} was killed as a result of the vote. His role was {hunter_victim_role}.")
-=======
 
         voted_player_is_killed, self.active_player_roles = Day.vote(Day, voted_player_index)
 
@@ -231,14 +226,6 @@ class Play:
 
         elif voted_player_is_killed == False :
             print(f"\n {voted_player_name} survived the villagers execution attempt!")
-
-
->>>>>>> Stashed changes
-
-        elif voted_player_is_killed == False :
-            print(f"\n {voted_player_name} survived the villagers execution attempt!")
->>>>>>> Stashed changes
-
 
 
     def name2index(self, name:str) -> int:
