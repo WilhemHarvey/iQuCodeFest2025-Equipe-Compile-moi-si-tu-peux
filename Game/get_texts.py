@@ -156,11 +156,43 @@ def get_texts():
     # 19
     input_font_werewolf = input_font = pygame.font.Font(None, 40)
     text_objects.append(
-        input_font_seer.render(
+        input_font_werewolf.render(
             "The werewolves wake up! Enter the name of the player that is endangered",
             True,
             "Yellow",
         )
     )
+
+
+    # 20
+    input_font_saviour = input_font = pygame.font.Font(None, 40)
+    text_objects.append(
+        input_font_seer.render(
+            "The saviour wakes up! Enter the name of the player to protect",
+            True,
+            "Yellow",
+        )
+    )
+
+    # 21
+    input_font_saviour = input_font = pygame.font.Font(None, 40)
+    text_objects.append(
+        input_font_seer.render(
+            "The thief wakes up! Enter the name of the player swap role with",
+            True,
+            "Yellow",
+        )
+    )
+
+    # 22
+    title_font = pygame.font.Font(None, 70)
+    text_objects.append(
+        title_font.render(
+            "The village is awake: Day phase",
+            True,
+            "Yellow",
+        )
+    )
+
 
     return text_objects

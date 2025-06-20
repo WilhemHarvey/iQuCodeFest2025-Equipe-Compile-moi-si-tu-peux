@@ -179,7 +179,10 @@ while True:
             if player_chosen == True:
                 night_obj.Werewolf(input_text)
                 night_phase_step += 1
-                endangered_player = input_text
+                endangered_player = game_variables.ind2name[input_text]
+                input_text = ""
+
+        ## Witch
         elif night_phase_step == 2:
             if (
                 not "Witch" in game_variables.player_roles
@@ -187,7 +190,29 @@ while True:
             ):
                 night_phase_step += 1
             else:
-                input_text, choice_made = night_functions.werewolf(
+                input_text, choice_made = night_functions.witch(
+                    screen,
+                    input_text,
+                    image_objects,
+                    text_objects,
+                    screen_dim,
+                    game_variables,
+                    endangered_player,
+                )
+                if choice_made == True:
+                    if input_text == "save":
+                        game_variables.witch_power[0] = False
+                        night_obj.Witch(save_attacked_player=True)
+                    if not input_text == "nothing":
+                        game_variables.witch_power[1] = False
+                        night_obj.Witch(attack_player_index=input_text)
+                    night_phase_step += 1
+                    input_text = ""
+
+        # Savior
+        elif night_phase_step == 3:
+            if "Savior" in game_variables.player_roles:
+                input_text, player_chosen = night_functions.savior(
                     screen,
                     input_text,
                     image_objects,
@@ -195,6 +220,54 @@ while True:
                     screen_dim,
                     game_variables,
                 )
+                if player_chosen == True:
+                    night_obj.Savior(input_text)
+                    night_phase_step += 1
+                    endangered_player = input_text
+                    input_text = ""
+            else:
+                night_phase_step += 1
+
+        elif night_phase_step == 4:
+            if "Thief" in game_variables.player_roles:
+                input_text, player_chosen = night_functions.thief(
+                    screen,
+                    input_text,
+                    image_objects,
+                    text_objects,
+                    screen_dim,
+                    game_variables,
+                )
+                if player_chosen == True:
+                    game_variables.player_roles, game_variables.couple = (
+                        night_obj.Thief(input_text)
+                    )
+                    night_phase_step += 1
+                    endangered_player = input_text
+                    input_text = ""
+            else:
+                night_phase_step += 1
+        else:
+            quantum_circuit, endangered_players = night_obj.Finish_Night()
+            game_step += 1
+            input_text = ""
+            day_object = day_mecanics.Day(
+                quantum_circuit,
+                endangered_players,
+                game_variables.player_roles,
+                game_variables.couple,
+            )
+            day_phase_step = 0
+
+            
+    elif game_step == 6:
+        screen.fill((135, 206, 235))
+        if day_phase_step == 0:
+            killed_players, new_roles = day_object.night_measures()
+        killed_player_names = []
+        for player in killed_players:
+            killed_player_names.append(game_variables.ind2name(player))
+        game_variables.player_roles = new_roles
 
     pygame.display.update()
     clock.tick(60)
