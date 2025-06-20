@@ -198,8 +198,9 @@ class Play:
                 night.Witch(save_attacked_player=True)
             if save_attacked_player == "False": 
                 print("\nThe Witch can attack another player.")
-                attack_player = str(input("Which player do you want to attack? (Enter player name): "))
-                night.Witch(attack_player_index=self.name2index(attack_player), save_attacked_player=False, )
+                attack_player = str(input("Which player do you want to attack? (Enter player name or No (dont attack anyone)): "))
+                if attack_player != "No":
+                    night.Witch(attack_player_index=self.name2index(attack_player), save_attacked_player=False, )
             print("\nThe Witch goes back to sleep...")
 
         if "Savior" in self.active_player_roles:
