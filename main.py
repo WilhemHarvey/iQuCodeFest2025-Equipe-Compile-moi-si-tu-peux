@@ -259,7 +259,6 @@ while True:
             )
             day_phase_step = 0
 
-            
     elif game_step == 6:
         screen.fill((135, 206, 235))
         if day_phase_step == 0:

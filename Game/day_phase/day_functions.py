@@ -28,7 +28,7 @@ def vote(
     screen.blit(title, (screen_dim[1] / 16, screen_dim[1] / 16))
 
     # Prompt
-    prompt = text_objects[19]
+    prompt = text_objects[23]
     screen.blit(
         prompt,
         (
@@ -37,7 +37,7 @@ def vote(
         ),
     )
     # INPUT
-    input_text_to_screen = title_font.render(input_text, True, "Yellow")
+    input_text_to_screen = title_font.render(input_text, True, "Black")
     screen.blit(
         input_text_to_screen,
         (
