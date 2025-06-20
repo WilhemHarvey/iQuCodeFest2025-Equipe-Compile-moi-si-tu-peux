@@ -33,3 +33,13 @@ Game/night_phase/__pycache__/night_functions.cpython-313.pyc
 Game/num_characters/__pycache__/choose_character.cpython-313.pyc
 Game/player_names/__pycache__/player_names.cpython-313.pyc
 Game/start_screen/__pycache__/start_screen.cpython-313.pyc
+__pycache__/utils.cpython-313.pyc
+Game/assign_roles/__pycache__/assign_roles.cpython-313.pyc
+Game/day_phase/__pycache__/day_functions.cpython-313.pyc
+Game/mecanics/__pycache__/Day_game.cpython-313.pyc
+Game/mecanics/__pycache__/Night_game.cpython-313.pyc
+Game/mecanics/__pycache__/Play_game.cpython-313.pyc
+Game/night_phase/__pycache__/night_functions.cpython-313.pyc
+Game/num_characters/__pycache__/choose_character.cpython-313.pyc
+Game/player_names/__pycache__/player_names.cpython-313.pyc
+Game/start_screen/__pycache__/start_screen.cpython-313.pyc
