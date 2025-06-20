@@ -164,7 +164,7 @@ class Play:
                     INPUT = False
                 else:
                     print("\nPlease enter a valid player name...")
-            role = night.Clairvoyante(self.name2index(player_name))
+            role = night.Seer(self.name2index(player_name))
 
             print(f"\nThe role of {player_name} is: {role}")
             print("\nThe Seer goes back to sleep...")
@@ -186,15 +186,20 @@ class Play:
 
         if "Witch" in self.active_player_roles:
             print("\nThe Witch wakes up...")
-            save_attacked_player = bool(input("Do you want to save the attacked player? (True/False): "))
-            if save_attacked_player == True:
-                night.Witch(attack_player_index, save_attacked_player=True)
-            if save_attacked_player == False: 
+            INPUT = True
+            while INPUT:
+                save_attacked_player = input("Do you want to save the attacked player? (True/False): ")
+                if save_attacked_player == "True" or save_attacked_player == "False" :
+                    INPUT = False
+                else:
+                    print("\nYour answer must be True or False...")
+
+            if save_attacked_player == "True":
+                night.Witch(save_attacked_player=True)
+            if save_attacked_player == "False": 
                 print("\nThe Witch can attack another player.")
                 attack_player = str(input("Which player do you want to attack? (Enter player name): "))
-                night.Witch(save_attacked_player=False, 
-                            attack_player=attack_player,
-                            attack_player_index=self.name2index(attack_player))
+                night.Witch(attack_player_index=self.name2index(attack_player), save_attacked_player=False, )
             print("\nThe Witch goes back to sleep...")
 
         if "Savior" in self.active_player_roles:
@@ -223,7 +228,7 @@ class Play:
             print("\nThe Thief goes back to sleep...")
 
         # end of the phase night
-        self.night_circuit, self.endangered_players = night.finish_night()
+        self.night_circuit, self.endangered_players = night.Finish_Night()
         print("\nThe night is now over.")
         
 
