@@ -4,9 +4,9 @@ from qiskit import QuantumCircuit
 
 class Night:
 
-    def __init__(self, active_players, roles, witch_power, couple=None):
+    def __init__(self,roles, witch_power, couple=None):
 
-        self.qc = QuantumCircuit()
+        self.qc = QuantumCircuit(1)
 
         self.roles_list = roles
 
@@ -34,7 +34,7 @@ class Night:
         self, save_attacked_player=False, attack_player=None, attack_player_index=None
     ):
 
-        if attack_player not in self.alive:
+        if self.roles_list[attack_player_index] == None:
             raise ValueError("Trying to kill a dead player")
 
         if save_attacked_player == True and self.witch_ability[0] != False:
@@ -68,7 +68,7 @@ class Night:
 
         return self.roles_list[player_index]
 
-    def thief(self, player_to_steal):
+    def Thief(self, player_to_steal):
         stealer = np.argwhere(self.roles == "thief")[0][0]
         if stealer in self.couple and player_to_steal not in self.couple:
             self.couple[np.argwhere(self.couple == stealer)[0][0]] = player_to_steal
@@ -109,12 +109,9 @@ class Night:
 
         return
     
-    def cupid(self, players_to_marry):
-        self.in_love = players_to_marry
-
     def finish_night(self):
 
         night_circuit = self.qc.cx(self.in_love[0], self.in_love[1])
 
 
-        return night_circuit
+        return night_circuit, self.endangered_players

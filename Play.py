@@ -5,6 +5,7 @@ from Night import *
 
 # TODO: handles the exception raised, the program must not stop but just start over 
 # exactly at the same state as before the exception was raised
+# TODO: handles all cases where the user does not enter a valid input ! 
 
 class Play:
 
@@ -28,7 +29,9 @@ class Play:
         self.DAY = False
 
         self.couple = None
-        self.witch_power = [True, True]  # [can_heal, can_kill]
+        self.witch_power = [True, True]  # [can_heal, can_attack]
+        self.night_circuit = None
+        self.endangered_players = []  
         
 
         ##### Initialize the game #####
@@ -47,7 +50,7 @@ class Play:
 
         print(f"\nPlease enter the names of the {self.player_count} players:")
         for i in range(self.player_count):
-            name = input(f"Player {i + 1}: ").strip()
+            name = str(input(f"Player {i + 1}: ").strip())
             self.player_names.append(name)
 
         self.active_players, self.ind2name = self.assign_roles()
@@ -64,12 +67,22 @@ class Play:
             # Start a new tour
             self.tour_count += 1
             print(f"\nTour {self.tour_count} begins!")
-            print("Current players and their roles:")
+            print("Active players and their roles:")
             for player, role in self.active_players.items():
                 print(f"{player}: {self.active_player_roles[role]}")
             
             # Night phase
+            print("\nThe village falls asleep...")
+            # Cupid if first night only
+            if self.tour_count ==1:
+                if 'Cupid' in self.active_player_roles:
+                    print("\nCupid wakes up...\n Which players do you want to marry (enter their names):")
+                    player1= str(input("\nPlayer 1:"))
+                    player2 = str(input("\nPlayer 2:"))
+                    self.couple = [self.name2index(player1), self.name2index(player2)]
             self.night_phase()
+
+
 
             # Day phase
             self.day_phase()
@@ -99,42 +112,55 @@ class Play:
         """
         Handles the night phase of the game, including player actions and role-specific abilities.
         """
-        print("\nThe village falls asleep...")
 
         # Create a Night instance
-        night = Night(self.active_players, self.active_player_roles, 
+        night = Night(self.active_player_roles, 
                       self.witch_power, self.couple)
-    
-        # Cupidon if first night only
-        if self.tour_count ==1:
-            if 'Cupid' in self.active_player_roles:
-                print("\nCupid wakes up...")
 
         # Role-specific actions during the night
         if 'Seer' in self.active_player_roles:
             print("\nThe Seer wakes up...")
-            player_name = int(input("Which player role do you want to see? (Enter player name): "))
+            player_name = str(input("Which player role do you want to see? (Enter player name): "))
             role = night.Clairvoyante(self.name2index(player_name))
             print(f"\nThe role of {player_name} is: {role}")
+            print("\nThe Seer goes back to sleep...")
+
 
         if "Werewolf" in self.active_player_roles:
             print("\nThe Werewolves wake up...")
+            attack_player_index = str(input("Which player do you want to attack? (Enter player name): "))
+            night.Werewolf(self.name2index(attack_player_index))
+            print("\nThe Werewolves go back to sleep...")
             
 
         if 'Witch' in self.active_player_roles:
             print("\nThe Witch wakes up...")
+            save_attacked_player = bool(input("Do you want to save the attacked player? (True/False): "))
+            if save_attacked_player:
+                night.Witch(save_attacked_player=True)
+            else: 
+                print("\nThe Witch can attack another player.")
+                attack_player = str(input("Which player do you want to attack? (Enter player name): "))
+                night.Witch(save_attacked_player=False, 
+                            attack_player=attack_player,
+                            attack_player_index=self.name2index(attack_player))
+            print("\nThe Witch goes back to sleep...")
 
         if "Savior" in self.active_player_roles:
             print("\nThe Savior wakes up...")
-
+            player_index = str(input("Which player do you want to save? (Enter player name): "))
+            night.Savior(self.name2index(player_index))
+            print("\nThe Savior goes back to sleep...")
         
         if "Thief" in self.active_player_roles:
             print("\nThe Thief wakes up...")
+            player_index = str(input("Which player do you want to steal? (Enter player name): "))
+            self.active_player_roles = night.Thief(self.name2index(player_index))
+            print("\nThe Thief goes back to sleep...")
 
         # end of the phase night
-        print("\nThe night is over.")
-        
-
+        self.night_circuit, self.endangered_players = night.finish_night()
+        print("\nThe night is now over.")
         
 
     
@@ -147,7 +173,7 @@ class Play:
         # Voting phase
         votes = {}
         for player in self.players.keys():
-            vote = input(f"{player}, who do you want to vote for? (Enter player name): ").strip()
+            vote = str(input(f"{player}, who do you want to vote for? (Enter player name): ").strip())
             if vote in self.players:
                 votes[vote] = votes.get(vote, 0) + 1
             else:
@@ -166,7 +192,6 @@ class Play:
                 print("No clear decision was made, no one is voted out.")
         else:
             print("No votes were cast.")
-
 
     def name2index(self, name:str) -> int:
         """
@@ -189,6 +214,6 @@ class Play:
     
 if __name__ == "__main__":
     play = Play()
-    # print("\nAssigned Players and Roles:")
-    # for player, role in play.players.items():
-    #     print(f"{player}: {play.player_roles[role]}")
+    print("\nAssigned Players and Roles:")
+    for player, role in play.players.items():
+        print(f"{player}: {play.player_roles[role]}")
