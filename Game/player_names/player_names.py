@@ -60,6 +60,7 @@ def get_names(screen, error_text, screen_dim, players_names, input_text):
                 if not input_text == "" and input_text not in players_names:
                     return input_text, input_text
                 else:
+                    input_text = ""
                     text_to_show = error_text
                     black_space = pygame.Surface((screen_dim[0], (screen_dim[1] / 4)))
                     screen.blit(black_space, (0, 12 * (screen_dim[1] / 16)))
