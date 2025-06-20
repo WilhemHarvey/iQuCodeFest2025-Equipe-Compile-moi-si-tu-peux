@@ -246,10 +246,10 @@ class Play:
 
         day = Day(self.N_circuit, self.N_endangered_players, self.active_player_roles,self.couple)
 
-        dead_players_night, self.roles = Day.night_measures(Day)
+        dead_players_night, self.active_player_roles = Day.night_measures(Day)
         for i in dead_players_night :
             dead_players_night_name = self.index2name(i)
-            dead_players_night_role = self.roles[i]
+            dead_players_night_role = self.active_player_roles[i]
             
             print(f"\n {dead_players_night_name} was killed as a result of the vote. His role was {dead_players_night_role}.")
             if dead_players_night_role == "Hunter":
@@ -261,8 +261,8 @@ class Play:
                     else:
                         print("\nPlease enter a valid player name...")
                 hunter_victim_index = self.name2index(hunter_victim_name)
-                hunter_victim_role = self.roles(hunter_victim_index)
-                dead_players, self.roles = day.hunter(day,hunter_victim_index)
+                hunter_victim_role = self.active_player_roles(hunter_victim_index)
+                dead_players, self.active_player_roles = day.hunter(day,hunter_victim_index)
                 print(f"\n {hunter_victim_name} was killed by the hunter. His role was {hunter_victim_role}.")
                 if hunter_victim_index in self.couple :
                     hunter_victim_lover_index = [player for player in self.couple if player != hunter_victim_index][0]
@@ -270,6 +270,10 @@ class Play:
                     hunter_victim_lover_name = self.index2name(hunter_victim_lover_index)
                     print(f"\n {hunter_victim_name} was in love with {hunter_victim_lover_name}, which means that{hunter_victim_lover_name} is also dead. His role was {hunter_victim_lover_role}.")
                     self.lover_dead == True
+
+            # Remove the dead players from the active players roles list
+            self.active_player_roles[i] = None
+
 
         voted_player_name = str(
             input("Game master, who does the village vote for? (Enter player name): ")
