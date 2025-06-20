@@ -49,6 +49,6 @@ def run_circuit(circuit: QuantumCircuit) -> str:
 
     result = simulator.run(qc, shots=1).result()
     counts = result.get_counts()
-    res_bitstring = counts.keys()[0]
+    res_bitstring = list(counts.keys())[0]  # Convert dict_keys to a list
 
     return res_bitstring

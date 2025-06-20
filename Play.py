@@ -3,10 +3,6 @@ import random
 from Day import *
 from Night import *
 
-# TODO: handles the exception raised, the program must not stop but just start over
-# exactly at the same state as before the exception was raised
-# TODO: handles all cases where the user does not enter a valid input ! 
-
 class Play:
 
     def __init__(self):
@@ -44,31 +40,34 @@ class Play:
         self.night_circuit = None
         self.endangered_players = []  
         
-
-        self.N_circuit = None
-        self.N_endangered_players = None
-
-        self.N_circuit = None
-        self.N_endangered_players = None
-
         ##### Initialize the game #####
         print(f"Please enter the number of players for the role of: ")
         for role in self.ROLES:
-            count = int(input(f"{role}: "))
-            if count >= 0:  # Validate for non-negative numbers
-                self.role_counts.append(count)
-                self.player_count += count
-                for i in range(count):
-                    self.active_player_roles.append(role)
-            else:
-                raise ValueError("\nPlease enter a valid non-negative integer number")
+            INPUT = True
+            while INPUT: 
+                count = self.get_valid_input(f"{role}: ", int)
+                if count >= 0:  # Validate for non-negative numbers
+                    INPUT = False
+                    self.role_counts.append(count)
+                    self.player_count += count
+                    for i in range(count):
+                        self.active_player_roles.append(role)
+                    
+                else:
+                    print("\nPlease enter a valid non-negative integer number...")
 
         # print(self.active_player_roles)
 
         print(f"\nPlease enter the names of the {self.player_count} players:")
         for i in range(self.player_count):
-            name = str(input(f"Player {i + 1}: ").strip())
-            self.player_names.append(name)
+            INPUT = True
+            while INPUT:
+                name = self.get_valid_input(f"Player {i + 1}: ", str)
+                if name != "" and name not in self.player_names:
+                    INPUT = False
+                    self.player_names.append(name)
+                else: 
+                    print("\nPlease enter a valid name that is not already taken...")
 
         self.active_players, self.ind2name = self.assign_roles()
 
@@ -88,18 +87,39 @@ class Play:
                 print(f"{player}: {self.active_player_roles[role]}")
 
             # Night phase
+            self.NIGHT = True
             print("\nThe village falls asleep...")
             # Cupid if first night only
             if self.tour_count ==1:
                 if 'Cupid' in self.active_player_roles:
                     print("\nCupid wakes up...\n Which players do you want to marry (enter their names):")
-                    player1= str(input("\nPlayer 1:"))
-                    player2 = str(input("\nPlayer 2:"))
+                    INPUT = True
+                    while INPUT:
+                        player1= self.get_valid_input("\nPlayer 1:", str)
+                        if player1 not in self.active_players:
+                            print("\nPlease enter a valid player name...")
+                        else:
+                            INPUT = False
+                        
+                    INPUT = True
+                    while INPUT:
+                        player2 = self.get_valid_input("\nPlayer 2:", str)
+                        if player2 not in self.active_players or player2 == player1:
+                            print("\nPlease enter a valid player name that is not the same as Player 1...")
+                        else: 
+                            INPUT = False
+                        
                     self.couple = [self.name2index(player1), self.name2index(player2)]
+            
+            
             self.night_phase()
+            self.NIGHT = False
+            self.DAY = True
 
             # Day phase
             self.day_phase()
+            self.DAY = False
+            self.NIGHT = True
 
             # After the end of one entire tour, check of the end conditions
             self.CONTINUE = self.check_end_conditions()
@@ -134,46 +154,79 @@ class Play:
         # Role-specific actions during the night
         if "Seer" in self.active_player_roles:
             print("\nThe Seer wakes up...")
-            player_name = str(input("Which player role do you want to see? (Enter player name): "))
-            role = night.Clairvoyante(self.name2index(player_name))
+
+            INPUT = True
+            while INPUT:
+                player_name = self.get_valid_input("Which player role do you want to see? (Enter player name): ", str)
+                if player_name in self.active_players:
+                    INPUT = False
+                else:
+                    print("\nPlease enter a valid player name...")
+            role = night.Seer(self.name2index(player_name))
+
             print(f"\nThe role of {player_name} is: {role}")
             print("\nThe Seer goes back to sleep...")
 
 
         if "Werewolf" in self.active_player_roles:
             print("\nThe Werewolves wake up...")
-            attack_player_index = str(input("Which player do you want to attack? (Enter player name): "))
-            night.Werewolf(self.name2index(attack_player_index))
+            INPUT = True
+            while INPUT:
+                attack_player_name = self.get_valid_input("Which player do you want to attack? (Enter player name): ", str)
+                if attack_player_name in self.active_players:
+                    INPUT = False
+                else:
+                    print("\nPlease enter a valid player name...")
+
+            night.Werewolf(self.name2index(attack_player_name))
             print("\nThe Werewolves go back to sleep...")
             
 
-        if 'Witch' in self.active_player_roles:
+        if "Witch" in self.active_player_roles:
             print("\nThe Witch wakes up...")
-            save_attacked_player = bool(input("Do you want to save the attacked player? (True/False): "))
-            if save_attacked_player:
+            INPUT = True
+            while INPUT:
+                save_attacked_player = input("Do you want to save the attacked player? (True/False): ")
+                if save_attacked_player == "True" or save_attacked_player == "False" :
+                    INPUT = False
+                else:
+                    print("\nYour answer must be True or False...")
+
+            if save_attacked_player == "True":
                 night.Witch(save_attacked_player=True)
-            else: 
+            if save_attacked_player == "False": 
                 print("\nThe Witch can attack another player.")
                 attack_player = str(input("Which player do you want to attack? (Enter player name): "))
-                night.Witch(save_attacked_player=False, 
-                            attack_player=attack_player,
-                            attack_player_index=self.name2index(attack_player))
+                night.Witch(attack_player_index=self.name2index(attack_player), save_attacked_player=False, )
             print("\nThe Witch goes back to sleep...")
 
         if "Savior" in self.active_player_roles:
             print("\nThe Savior wakes up...")
-            player_index = str(input("Which player do you want to save? (Enter player name): "))
-            night.Savior(self.name2index(player_index))
+            INPUT = True
+            while INPUT:
+                player_name = self.get_valid_input("Which player do you want to protect? (Enter player name): ", str)
+                if player_name in self.active_players:
+                    INPUT = False
+                else:
+                    print("\nPlease enter a valid player name...")
+
+            night.Savior(self.name2index(player_name))
             print("\nThe Savior goes back to sleep...")
         
         if "Thief" in self.active_player_roles:
             print("\nThe Thief wakes up...")
-            player_index = str(input("Which player do you want to steal? (Enter player name): "))
-            self.active_player_roles = night.Thief(self.name2index(player_index))
+            INPUT = True
+            while INPUT:
+                player_name = self.get_valid_input("Which player do you want to steal? (Enter player name): ", str)
+                if player_name in self.active_players:
+                    INPUT = False
+                else:
+                    print("\nPlease enter a valid player name...")
+            self.active_player_roles = night.Thief(self.name2index(player_name))
             print("\nThe Thief goes back to sleep...")
 
         # end of the phase night
-        self.night_circuit, self.endangered_players = night.finish_night()
+        self.night_circuit, self.endangered_players = night.Finish_Night()
         print("\nThe night is now over.")
         
 
@@ -184,19 +237,26 @@ class Play:
         """
         print("\nThe village wakes up...")
 
-        day = Day(self.N_circuit, self.N_endangered_players, self.active_player_roles,self.couple)
+        day = Day(self.night_circuit, self.endangered_players, self.active_player_roles,self.couple)
 
-        dead_players_night, self.roles = Day.night_measures(Day)
+        dead_players_night, self.roles = day.night_measures()
+
         for i in dead_players_night :
             dead_players_night_name = self.index2name(i)
-            dead_players_night_role = self.roles[i]
+            dead_players_night_role = self.active_player_roles[i]
             
             print(f"\n {dead_players_night_name} was killed as a result of the vote. His role was {dead_players_night_role}.")
             if dead_players_night_role == "Hunter":
-                hunter_victim_name = str(input("Who does the hunter want to kill? (Enter player name): "))
+                INPUT = True
+                while INPUT:
+                    hunter_victim_name = self.get_valid_input("Who does the hunter want to kill? (Enter player name): ", str)
+                    if hunter_victim_name in self.active_players:
+                        INPUT = False
+                    else:
+                        print("\nPlease enter a valid player name...")
                 hunter_victim_index = self.name2index(hunter_victim_name)
-                hunter_victim_role = self.roles(hunter_victim_index)
-                dead_players, self.roles = day.hunter(day,hunter_victim_index)
+                hunter_victim_role = self.active_player_roles(hunter_victim_index)
+                dead_players, self.active_player_roles = day.hunter(day,hunter_victim_index)
                 print(f"\n {hunter_victim_name} was killed by the hunter. His role was {hunter_victim_role}.")
                 if hunter_victim_index in self.couple :
                     hunter_victim_lover_index = [player for player in self.couple if player != hunter_victim_index][0]
@@ -205,13 +265,17 @@ class Play:
                     print(f"\n {hunter_victim_name} was in love with {hunter_victim_lover_name}, which means that{hunter_victim_lover_name} is also dead. His role was {hunter_victim_lover_role}.")
                     self.lover_dead == True
 
+            # Remove the dead players from the active players roles list
+            self.active_player_roles[i] = None
+
+
         voted_player_name = str(
             input("Game master, who does the village vote for? (Enter player name): ")
         )
         voted_player_index = self.name2index(voted_player_name)
         voted_player_role = self.active_player_roles[voted_player_index]
 
-        voted_player_is_killed, self.active_player_roles = day.vote(day, voted_player_index)
+        voted_player_is_killed, self.active_player_roles = day.vote(voted_player_index)
 
         if voted_player_is_killed == True :
             print(f"\n {voted_player_name} was killed as a result of the vote. His role was {voted_player_role}.")
@@ -274,6 +338,14 @@ class Play:
         else:
             return True
     
+
+    def get_valid_input(self, prompt, conversion_function=str):
+        while True:
+            try:
+                user_input = input(prompt)
+                return conversion_function(user_input)
+            except ValueError:
+                print("\nInvalid input. Please try again.")
         
 
     def name2index(self, name:str) -> int:
