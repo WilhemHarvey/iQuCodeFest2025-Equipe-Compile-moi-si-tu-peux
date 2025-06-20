@@ -135,7 +135,7 @@ class Play:
         if "Seer" in self.active_player_roles:
             print("\nThe Seer wakes up...")
             player_name = str(input("Which player role do you want to see? (Enter player name): "))
-            role = night.Clairvoyante(self.name2index(player_name))
+            role = night.Seer(self.name2index(player_name))
             print(f"\nThe role of {player_name} is: {role}")
             print("\nThe Seer goes back to sleep...")
 
@@ -147,12 +147,12 @@ class Play:
             print("\nThe Werewolves go back to sleep...")
             
 
-        if 'Witch' in self.active_player_roles:
+        if "Witch" in self.active_player_roles:
             print("\nThe Witch wakes up...")
             save_attacked_player = bool(input("Do you want to save the attacked player? (True/False): "))
-            if save_attacked_player:
-                night.Witch(save_attacked_player=True)
-            else: 
+            if save_attacked_player == True:
+                night.Witch(attack_player_index, save_attacked_player=True)
+            if save_attacked_player == False: 
                 print("\nThe Witch can attack another player.")
                 attack_player = str(input("Which player do you want to attack? (Enter player name): "))
                 night.Witch(save_attacked_player=False, 
@@ -162,8 +162,8 @@ class Play:
 
         if "Savior" in self.active_player_roles:
             print("\nThe Savior wakes up...")
-            player_index = str(input("Which player do you want to save? (Enter player name): "))
-            night.Savior(self.name2index(player_index))
+            player_name = str(input("Which player do you want to save? (Enter player name): "))
+            night.Savior(self.name2index(player_name))
             print("\nThe Savior goes back to sleep...")
         
         if "Thief" in self.active_player_roles:

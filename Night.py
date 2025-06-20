@@ -35,11 +35,8 @@ class Night:
         return
 
     def Witch(
-        self, save_attacked_player=False, attack_player=None, attack_player_index=None
+        self, attack_player_index, save_attacked_player=False, 
     ):
-
-        if self.roles_list[attack_player_index] == None:
-            raise ValueError("Trying to kill a dead player")
 
         if save_attacked_player == True and self.witch_ability[0] != False:
             self.qc.rx(self.heal, 0)
@@ -75,7 +72,7 @@ class Night:
         return self.roles_list[player_index]
 
     def Thief(self, player_to_steal):
-        stealer = np.argwhere(self.roles == "thief")[0][0]
+        stealer = np.argwhere(self.roles_list == "thief")[0][0]
         if stealer in self.couple and player_to_steal not in self.couple:
             self.couple[np.argwhere(self.couple == stealer)[0][0]] = player_to_steal
         elif player_to_steal in self.couple and stealer not in self.couple:
@@ -99,11 +96,11 @@ class Night:
             q_player_to_steal = np.argwhere(self.endangered_players == stealer)[0][0]
             self.endangered_players[q_player_to_steal] = stealer
 
-        self.roles[stealer], self.roles[player_to_steal] = (
-            self.roles[player_to_steal],
-            self.roles[stealer],
+        self.roles_list[stealer], self.roles_list[player_to_steal] = (
+            self.roles_list[player_to_steal],
+            self.roles_list[stealer],
         )
-        return self.roles
+        return self.roles_list
 
     def Savior(self, player_index):
 
@@ -111,7 +108,8 @@ class Night:
             raise ValueError("Trying to cleanse a dead player")
 
         if player_index in self.endangered_players:
-            self.qc.reset(player_index)
+            position = self.endangered_players.index(player_index)
+            self.qc.reset(position)
 
         return
     
