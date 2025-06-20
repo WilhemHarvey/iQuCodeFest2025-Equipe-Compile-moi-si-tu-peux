@@ -135,18 +135,24 @@ class Night:
 
         return
     
-    def Finish_Night(self):
-        
-        num_qubits = self.qc.num_qubits
-        for player in self.in_love:
-            if player in self.endangered_players:
-                lover_qc = QuantumCircuit(num_qubits + 1) 
-                lover_qubit_index = num_qubits+1
-                lover_qc.cx(0, lover_qubit_index)
-
-                self.qc.append(lover_qc, [0,1,2])
-
-                self.endangered_players.append(self.lover_in_danger)
-                break
-
+    def Finish_Night(self):        
+        num = self.qc.num_qubits        
+        if self.in_love[0] in self.endangered_players:
+            lover_qc = QuantumCircuit(num + 1)            
+            lover_qubit_index = self.endangered_players.index(self.in_love[0])
+            lover_qc.cx(lover_qubit_index, lover_qc.num_qubits - 1)            
+            additional_qubits = QuantumRegister(1)
+            self.qc.add_register(additional_qubits)            
+            self.qc.append(lover_qc, self.qc.qubits[:])            
+            self.endangered_players.append(self.lover_in_danger)        
+        elif self.in_love[1] in self.endangered_players:
+            lover_qc = QuantumCircuit(num+1)
+            lover_qubit_index = num+1            
+            lover_qubit_index = self.endangered_players.index(self.in_love[1])
+            lover_qc.cx(lover_qubit_index, lover_qc.num_qubits - 1)            
+            additional_qubits = QuantumRegister(1)
+            self.qc.add_register(additional_qubits)            
+            self.qc.append(lover_qc, self.qc.qubits[:])            
+            self.endangered_players.append(self.lover_in_danger)        
+    
         return self.qc, self.endangered_players

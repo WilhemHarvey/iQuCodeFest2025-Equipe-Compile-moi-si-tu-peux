@@ -67,6 +67,7 @@ class Day:
 
     def hunter(self, player_to_kill: int):
 
+        players_to_kill = [player_to_kill]
         qc = QuantumCircuit(1)
         qc.rx(2 * np.arcsin(np.sqrt(0.9)), 0)
 
@@ -81,7 +82,7 @@ class Day:
 
         killed_players = []
 
-        for faith, player in zip(res_bitstring, self.endangered_players):
+        for faith, player in zip(res_bitstring, players_to_kill):
             if faith == "1":
                 killed_players.append(player)
                 self.roles[player] = None
