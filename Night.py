@@ -136,21 +136,17 @@ class Night:
         return
     
     def Finish_Night(self):
-        # Vérifier si le circuit a suffisamment de qubits
-        required_qubits = 3
-        current_qubits = len(self.qc.qubits)
         
-        if current_qubits < required_qubits:
-            # Ajouter les qubits manquants en créant un QuantumRegister
-            from qiskit import QuantumRegister
-            additional_qubits = QuantumRegister(required_qubits - current_qubits)
-            self.qc.add_register(additional_qubits)
-        
+        num_qubits = self.qc.num_qubits
         for player in self.in_love:
             if player in self.endangered_players:
-                lover_qc = QuantumCircuit(3)
-                self.qc.append(lover_qc, [0, 1, 2])  # Assurez-vous que les indices sont valides
-                self.qc.cx(0, 1)
+                lover_qc = QuantumCircuit(num_qubits + 1) 
+                lover_qubit_index = num_qubits+1
+                lover_qc.cx(0, lover_qubit_index)
+
+                self.qc.append(lover_qc, [0,1,2])
+
                 self.endangered_players.append(self.lover_in_danger)
+                break
 
         return self.qc, self.endangered_players
