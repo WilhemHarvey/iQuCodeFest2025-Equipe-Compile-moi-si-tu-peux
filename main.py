@@ -258,18 +258,22 @@ while True:
                 game_variables.couple,
             )
             day_phase_step = 0
+            kills_done=False
 
     elif game_step == 6:
         screen.fill((135, 206, 235))
         if day_phase_step == 0:
-            killed_players, new_roles = day_object.night_measures()
-            killed_player_names = []
-            killed_player_roles = []
-            for player in killed_players:
-                killed_player_roles.append(game_variables.player_roles[player])
-                killed_player_names.append(game_variables.ind2name(player))
+            if kills_done==False:
+                og_roles=game_variables.player_roles.copy()
+                killed_players, new_roles = day_object.night_measures()
+                killed_player_names = []
+                killed_player_roles = []
+                for player in killed_players:
+                    killed_player_roles.append(og_roles[player])
+                    killed_player_names.append(game_variables.ind2name(player))
 
-            game_variables.player_roles = new_roles
+                game_variables.player_roles = new_roles
+                kills_done=True
 
             day_functions.night_results(
                 screen,
@@ -297,11 +301,12 @@ while True:
                 game_variables,
             )
             if player_chosen == True:
+                og_roles=game_variables.player_roles.copy()
                 killed, new_roles = day_object.vote(input_text)
                 killed_player_roles = []
                 killed_player_names=[]
                 if killed:
-                    killed_player_roles = [game_variables.player_roles[input_text]]
+                    killed_player_roles = [og_roles[input_text]]
                     killed_player_names = [game_variables.ind2name[input_text]]
                     game_variables.player_roles = new_roles
 
@@ -319,6 +324,7 @@ while True:
                 killed_player_roles,
                 killed_player_names,
             )
+            
             for event in pygame.event.get():
                 if event.type == pygame.quit:
                     pygame.quit()
