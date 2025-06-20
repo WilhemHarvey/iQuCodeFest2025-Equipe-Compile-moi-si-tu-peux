@@ -10,6 +10,8 @@ import Game.assign_roles.assign_roles as assign_roles
 import Game.night_phase.night_functions as night_functions
 import Game.day_phase.day_functions as day_functions
 import Game.mecanics.Play_game as play_mecanics
+import Game.mecanics.Night_game as night_mecanics
+import Game.mecanics.Day_game as day_mecanics
 from sys import exit
 
 pygame.init()
@@ -101,6 +103,13 @@ while True:
                 first_lover_entered = False
                 if game_variables.num_of_roles[2] == 0:
                     game_step += 1
+                night_phase_step = 0
+                seer_selected = False
+                night_obj = night_mecanics.Night(
+                    game_variables.player_roles,
+                    witch_power=game_variables.witch_power,
+                    couple=game_variables.couple,
+                )
 
     elif game_step == 4:
         screen.fill((0, 0, 0))
@@ -119,11 +128,11 @@ while True:
             else:
                 ##Get to the actual night process
                 game_step += 1
-                night_phase_step = 0
-                seer_selected = False
+                night_obj.in_love = couple = game_variables.couple
 
     elif game_step == 5:
         screen.fill((0, 0, 0))
+        ###SEER
         if night_phase_step == 0:
             if not "Seer" in game_variables.player_roles:
                 night_phase_step += 1
@@ -156,6 +165,36 @@ while True:
                         if event.type == pygame.KEYDOWN:
                             if event.key == pygame.K_RETURN:
                                 night_phase_step += 1
+                                input_text = ""
+        # Werewolves
+        elif night_phase_step == 1:
+            input_text, player_chosen = night_functions.werewolf(
+                screen,
+                input_text,
+                image_objects,
+                text_objects,
+                screen_dim,
+                game_variables,
+            )
+            if player_chosen == True:
+                night_obj.Werewolf(input_text)
+                night_phase_step += 1
+                endangered_player = input_text
+        elif night_phase_step == 2:
+            if (
+                not "Witch" in game_variables.player_roles
+                and game_variables.witch_power == [False, False]
+            ):
+                night_phase_step += 1
+            else:
+                input_text, choice_made = night_functions.werewolf(
+                    screen,
+                    input_text,
+                    image_objects,
+                    text_objects,
+                    screen_dim,
+                    game_variables,
+                )
 
     pygame.display.update()
     clock.tick(60)

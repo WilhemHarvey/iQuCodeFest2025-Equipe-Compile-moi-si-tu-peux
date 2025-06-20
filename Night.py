@@ -64,6 +64,7 @@ class Night:
                 raise ValueError("error with attack_player_index")
 
         return
+    
 
     def Seer(self, player_index):
         if self.roles_list[player_index] == None:
