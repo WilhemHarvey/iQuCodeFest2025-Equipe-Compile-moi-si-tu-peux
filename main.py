@@ -120,13 +120,42 @@ while True:
                 ##Get to the actual night process
                 game_step += 1
                 night_phase_step = 0
+                seer_selected = False
 
     elif game_step == 5:
         screen.fill((0, 0, 0))
-        for event in pygame.event.get():
-            if event.type == pygame.quit:
-                pygame.quit()
-                exit()
+        if night_phase_step == 0:
+            if not "Seer" in game_variables.player_roles:
+                night_phase_step += 1
+            else:
+                if seer_selected == False:
+                    input_text, seer_selected = night_functions.seer(
+                        screen,
+                        input_text,
+                        image_objects,
+                        text_objects,
+                        screen_dim,
+                        game_variables,
+                    )
+                    if seer_selected == True:
+                        role_to_show_index = play_mecanics.ROLES.index(input_text)
+
+                else:
+                    night_functions.show_seer(
+                        screen,
+                        role_to_show_index,
+                        input_text,
+                        image_objects,
+                        text_objects,
+                        screen_dim,
+                    )
+                    for event in pygame.event.get():
+                        if event.type == pygame.quit:
+                            pygame.quit()
+                            exit()
+                        if event.type == pygame.KEYDOWN:
+                            if event.key == pygame.K_RETURN:
+                                night_phase_step += 1
 
     pygame.display.update()
     clock.tick(60)

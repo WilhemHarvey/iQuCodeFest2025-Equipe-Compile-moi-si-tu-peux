@@ -130,7 +130,7 @@ def get_texts():
     # 16
     text_objects.append(
         input_font.render(
-            "Enter the name of the first lover:",
+            "Cupid wakes up! Enter the name of the first lover:",
             True,
             "Yellow",
         )
@@ -138,7 +138,16 @@ def get_texts():
     # 17
     text_objects.append(
         input_font.render(
-            "Enter the name of the second lover:",
+            "Cupid wakes up! Enter the name of the second lover:",
+            True,
+            "Yellow",
+        )
+    )
+    # 18
+    input_font_seer = input_font = pygame.font.Font(None, 55)
+    text_objects.append(
+        input_font.render(
+            "The seer wakes up! Enter the name of the player to see the role",
             True,
             "Yellow",
         )
