@@ -114,7 +114,7 @@ class Play:
         if 'Seer' in self.active_player_roles:
             print("\nThe Seer wakes up...")
             player_name = int(input("Which player role do you want to see? (Enter player name): "))
-            role = night.Clairvoyante(self.name2index(player_name))
+            role = night.Seer(self.name2index(player_name))
             print(f"\nThe role of {player_name} is: {role}")
 
         if "Werewolf" in self.active_player_roles:
@@ -135,9 +135,6 @@ class Play:
         print("\nThe night is over.")
         
 
-        
-
-    
     def day_phase(self):
         """
         Handles the day phase of the game, including voting and player actions.

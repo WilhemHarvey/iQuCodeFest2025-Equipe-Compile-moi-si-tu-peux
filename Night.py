@@ -62,7 +62,7 @@ class Night:
 
         return
 
-    def Clairvoyante(self, player_index):
+    def Seer(self, player_index):
         if self.roles_list[player_index] == None:
             raise ValueError("Trying to uncover the role of a dead player")
 
