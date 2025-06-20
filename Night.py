@@ -4,9 +4,9 @@ from qiskit import QuantumCircuit
 
 class Night:
 
-    def __init__(self, roles, witch_power, couple = None):
-        
-        self.qc = QuantumCircuit()
+    def __init__(self,roles, witch_power, couple=None):
+
+        self.qc = QuantumCircuit(1)
 
         self.roles_list = roles
         self.endangered_players = []
@@ -33,8 +33,13 @@ class Night:
             self.lover_in_danger = attack_player_index
 
         return
-    
-    def Witch(self, save_attacked_player = False, attack_player_index = None):
+
+    def Witch(
+        self, save_attacked_player=False, attack_player=None, attack_player_index=None
+    ):
+
+        if self.roles_list[attack_player_index] == None:
+            raise ValueError("Trying to kill a dead player")
 
         if save_attacked_player == True and self.witch_ability[0] != False:
             self.qc.rx(self.heal, 0)
@@ -63,13 +68,13 @@ class Night:
 
         return
 
-    def Clairvoyante(self, player_index):
+    def Seer(self, player_index):
         if self.roles_list[player_index] == None:
             raise ValueError("Trying to uncover the role of a dead player")
 
         return self.roles_list[player_index]
 
-    def thief(self, player_to_steal):
+    def Thief(self, player_to_steal):
         stealer = np.argwhere(self.roles == "thief")[0][0]
         if stealer in self.couple and player_to_steal not in self.couple:
             self.couple[np.argwhere(self.couple == stealer)[0][0]] = player_to_steal
@@ -119,7 +124,4 @@ class Night:
                 self.qc.cx(0,1)
                 self.endangered_players.append(self.lover_in_danger)
 
-        return self.qc
-
-    
-   
+        return self.night_circuit, self.endangered_players
