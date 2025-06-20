@@ -64,6 +64,7 @@ class Night:
                 raise ValueError("error with attack_player_index")
 
         return
+    
 
     def Seer(self, player_index):
         if self.roles_list[player_index] == None:
@@ -93,7 +94,7 @@ class Night:
             q_stealer_index = self.endangered_players.index(stealer)
             q_stealer = self.endangered_players[q_stealer_index]
 
-            q_player_to_steal_index = self.endangered_players.index(player_to_steal_index)
+            q_player_to_steal_index = self.endangered_players.index(player_to_steal)
             q_player_to_steal = self.endangered_players[q_player_to_steal_index]
 
 
