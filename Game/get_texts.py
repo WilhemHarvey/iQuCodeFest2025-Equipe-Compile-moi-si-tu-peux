@@ -156,7 +156,7 @@ def get_texts():
     # 19
     input_font_werewolf = input_font = pygame.font.Font(None, 40)
     text_objects.append(
-        input_font_seer.render(
+        input_font_werewolf.render(
             "The werewolves wake up! Enter the name of the player that is endangered",
             True,
             "Yellow",
