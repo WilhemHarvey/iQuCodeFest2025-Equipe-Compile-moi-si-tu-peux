@@ -6,7 +6,10 @@ from Game.get_texts import get_texts
 import Game.start_screen.start_screen as start_screen
 import Game.num_characters.choose_character as choose_character
 import Game.player_names.player_names as player_names
-import Wolfpaq as mecanics
+import Game.assign_roles.assign_roles as assign_roles
+import Game.night_phase.night_functions as night_functions
+import Game.day_phase.day_functions as day_functions
+import Game.mecanics.Play_game as play_mecanics
 from sys import exit
 
 pygame.init()
@@ -67,9 +70,58 @@ while True:
             players_names.append(new_player)
             input_text = ""
         if len(players_names) == num_players:
+            ## Transition to next step
             game_step += 1
+            ### Create game_instance
+            game_variables = play_mecanics.Play(players_names, num_roles)
+
+            # Get the name and role index in the previous list
+            current_player = 0
+            player_name = game_variables.player_names[0]
+            role_index = assign_roles.ROLES.index(
+                game_variables.player_roles[game_variables.players[player_name]]
+            )
 
     elif game_step == 3:
+        screen.fill((0, 0, 0))
+        distributed = assign_roles.print_roles(
+            screen, player_name, role_index, image_objects, text_objects, screen_dim
+        )
+        if distributed == True:
+            current_player += 1
+            if current_player < len(game_variables.ind2name):
+                # Get the name and role index in the previous list
+                player_name = game_variables.player_names[current_player]
+                role_index = assign_roles.ROLES.index(
+                    game_variables.player_roles[game_variables.players[player_name]]
+                )
+            else:
+                ##Transition to first night
+                game_step += 1
+                first_lover_entered = False
+                if game_variables.num_of_roles[2] == 0:
+                    game_step += 1
+
+    elif game_step == 4:
+        screen.fill((0, 0, 0))
+        input_text, name_entered = night_functions.cupid(
+            screen,
+            input_text,
+            image_objects,
+            text_objects,
+            screen_dim,
+            game_variables,
+            first_lover_entered,
+        )
+        if name_entered == True:
+            if first_lover_entered == False:
+                first_lover_entered = True
+            else:
+                ##Get to the actual night process
+                game_step += 1
+                night_phase_step = 0
+
+    elif game_step == 5:
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.quit:

@@ -25,4 +25,6 @@ def get_images():
     images_objects.append(pygame.image.load("Game/num_characters/thief_card.png"))
     # 10
     images_objects.append(pygame.image.load("Game/num_characters/savior_card.png"))
+    # 11
+    images_objects.append(pygame.image.load("Game/night_phase/moon.png"))
     return images_objects

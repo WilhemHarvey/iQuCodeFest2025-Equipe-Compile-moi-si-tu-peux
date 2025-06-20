@@ -101,5 +101,47 @@ def get_texts():
             "Red",
         )
     )
+    # 13
+    text_objects.append(
+        title_font.render(
+            "Distribute the following card to this player. Press enter when done",
+            True,
+            "Red",
+        )
+    )
+    # 14
+    text_objects.append(
+        title_font.render(
+            "The name is not valid or the player is dead",
+            True,
+            "Yellow",
+        )
+    )
+    # 15
+    title_font = pygame.font.Font(None, 70)
+    text_objects.append(
+        title_font.render(
+            "The village has fallen asleep: Night phase",
+            True,
+            "Yellow",
+        )
+    )
+    input_font = pygame.font.Font(None, 60)
+    # 16
+    text_objects.append(
+        input_font.render(
+            "Enter the name of the first lover:",
+            True,
+            "Yellow",
+        )
+    )
+    # 17
+    text_objects.append(
+        input_font.render(
+            "Enter the name of the second lover:",
+            True,
+            "Yellow",
+        )
+    )
 
     return text_objects
