@@ -13,17 +13,37 @@ def print_names(
     error_text,
     players_names,
 ):
+    # Title
     title = text_objects[11]
     screen.blit(
         title, ((screen_dim[0] / 2) - (title.get_width() / 2), screen_dim[1] / 8)
     )
-    # TODO, ÉCRIRE SUR DES LIGNES DIFFÉRENTES ET GARDER CE QUI EST ÉCRIT
-    input_text_to_screen = title_font.render(input_text, True, "red")
+    # previous_names
+    font = pygame.font.SysFont(None, 40)
+
+    line_height = 40  # Vertical spacing between lines
+    if len(players_names) > 15:
+        players_names_to_show = players_names[-15:]
+    else:
+        players_names_to_show = players_names
+
+    for i, name in enumerate(players_names_to_show):
+        text_surface = font.render(name, True, "red")  # white text
+        screen.blit(
+            text_surface,
+            (100, screen_dim[1] / 8 + screen_dim[1] / 16 + (i * line_height)),
+        )
+
+    input_text_to_screen = title_font.render(
+        f"Player {len(players_names)+1}: " + input_text, True, "red"
+    )
     screen.blit(
         input_text_to_screen,
         (
-            (screen_dim[0] / 2) - (input_text_to_screen.get_width() / 2),
-            13 * (screen_dim[1] / 16),
+            100,
+            screen_dim[1] / 8
+            + screen_dim[1] / 16
+            + (len(players_names_to_show) * line_height),
         ),
     )
 

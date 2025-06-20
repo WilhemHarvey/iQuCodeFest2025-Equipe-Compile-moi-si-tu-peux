@@ -50,7 +50,7 @@ def get_text(screen, input_text, character_number, error_text, screen_dim):
                         text_to_show,
                         (
                             (screen_dim[0] / 2) - (text_to_show.get_width() / 2),
-                            12 * (screen_dim[1] / 16),
+                            13 * (screen_dim[1] / 16),
                         ),
                     )
                     pygame.display.update()
