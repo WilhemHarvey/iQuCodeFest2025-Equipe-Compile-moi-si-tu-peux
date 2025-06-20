@@ -126,7 +126,7 @@ def night_results(
             prompt,
             (
                 (screen_dim[0] / 2) - (prompt.get_width() / 2),
-                (5 + 2 * i) * (screen_dim[1] / 16),
+                (5) * (screen_dim[1] / 16),
             ),
         )
     else:
