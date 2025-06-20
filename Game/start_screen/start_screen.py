@@ -1,7 +1,5 @@
 import pygame
 
-from sys import exit
-
 
 def intro_screen(screen, image_objects, text_objects, screen_dim):
     # Logo
