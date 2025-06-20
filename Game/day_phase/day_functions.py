@@ -116,11 +116,9 @@ def night_results(
         ),
     )
     font_players = pygame.font.Font(None, 40)
-    for i, player_name, player_role in enumerate(
-        zip(killed_player_names, killed_player_roles)
-    ):
+    if len(killed_player_roles) == 0:
         prompt = font_players.render(
-            player_name + "was killed as a " + player_role,
+            "Nobody was killed!",
             True,
             "Black",
         )
@@ -131,15 +129,31 @@ def night_results(
                 (5 + 2 * i) * (screen_dim[1] / 16),
             ),
         )
-        prompt = font_players.render(
-            "Press enter to continue",
-            True,
-            "Black",
-        )
-        screen.blit(
-            prompt,
-            (
-                (screen_dim[0] / 2) - (prompt.get_width() / 2),
-                (15) * (screen_dim[1] / 16),
-            ),
-        )
+    else:
+        for i, player_name, player_role in enumerate(
+            zip(killed_player_names, killed_player_roles)
+        ):
+            prompt = font_players.render(
+                player_name + "was killed as a " + player_role,
+                True,
+                "Black",
+            )
+            screen.blit(
+                prompt,
+                (
+                    (screen_dim[0] / 2) - (prompt.get_width() / 2),
+                    (5 + 2 * i) * (screen_dim[1] / 16),
+                ),
+            )
+            prompt = font_players.render(
+                "Press enter to continue",
+                True,
+                "Black",
+            )
+            screen.blit(
+                prompt,
+                (
+                    (screen_dim[0] / 2) - (prompt.get_width() / 2),
+                    (15) * (screen_dim[1] / 16),
+                ),
+            )
