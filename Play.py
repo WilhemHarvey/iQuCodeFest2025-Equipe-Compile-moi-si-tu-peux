@@ -279,6 +279,7 @@ class Play:
 
         if voted_player_is_killed == True :
             print(f"\n {voted_player_name} was killed as a result of the vote. His role was {voted_player_role}.")
+            victim_lover_role = None
             if voted_player_index in self.couple :
                 victim_lover_index = [player for player in self.couple if player != hunter_victim_index][0]
                 victim_lover_role = self.roles[victim_lover_index]
