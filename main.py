@@ -271,6 +271,7 @@ while True:
                 for player in killed_players:
                     killed_player_roles.append(og_roles[player])
                     killed_player_names.append(game_variables.ind2name[player])
+                    game_variables.active_player_names.remove(game_variables.ind2name[player])
 
                 game_variables.player_roles = new_roles
                 kills_done=True
@@ -313,6 +314,7 @@ while True:
                 if killed:
                     killed_player_roles = [og_roles[input_text]]
                     killed_player_names = [game_variables.ind2name[input_text]]
+                    game_variables.active_player_names.remove(killed_player_names[0])
                     game_variables.player_roles = new_roles
                 
                 if "Hunter" in killed_player_roles:
@@ -353,8 +355,15 @@ while True:
                 game_variables,
             )
             if player_chosen == True:
+                og_roles=game_variables.player_roles.copy()
                 endangered_player = game_variables.ind2name[input_text]
-                day_object.hunter(input_text)
+                killed_players, new_roles=day_object.hunter(input_text)
+                if len(killed_players)>0:
+                    killed_player_roles = [og_roles[input_text]]
+                    killed_player_names = [game_variables.ind2name[input_text]]
+                    game_variables.active_player_names.remove(game_variables.ind2name[input_text])
+                    game_variables.active_player_names.remove(killed_player_names[0])
+                    game_variables.player_roles = new_roles
                 day_phase_step +=1
                 
                 input_text = ""   
@@ -375,7 +384,7 @@ while True:
                     exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
-                        day_phase_step += 1
+                        day_phase_step =next_step
                         input_text = ""
 
         else:
