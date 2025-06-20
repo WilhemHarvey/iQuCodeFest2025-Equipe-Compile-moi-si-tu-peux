@@ -40,13 +40,6 @@ class Play:
         self.night_circuit = None
         self.endangered_players = []  
         
-
-        self.N_circuit = None
-        self.N_endangered_players = None
-
-        self.N_circuit = None
-        self.N_endangered_players = None
-
         ##### Initialize the game #####
         print(f"Please enter the number of players for the role of: ")
         for role in self.ROLES:
@@ -239,9 +232,9 @@ class Play:
         """
         print("\nThe village wakes up...")
 
-        day = Day(self.N_circuit, self.N_endangered_players, self.active_player_roles,self.couple)
+        day = Day(self.night_circuit, self.endangered_players, self.active_player_roles,self.couple)
 
-        dead_players_night, self.roles = Day.night_measures(Day)
+        dead_players_night, self.roles = day.night_measures()
         for i in dead_players_night :
             dead_players_night_name = self.index2name(i)
             dead_players_night_role = self.roles[i]
@@ -272,7 +265,7 @@ class Play:
         voted_player_index = self.name2index(voted_player_name)
         voted_player_role = self.active_player_roles[voted_player_index]
 
-        voted_player_is_killed, self.active_player_roles = day.vote(day, voted_player_index)
+        voted_player_is_killed, self.active_player_roles = day.vote(voted_player_index)
 
         if voted_player_is_killed == True :
             print(f"\n {voted_player_name} was killed as a result of the vote. His role was {voted_player_role}.")
