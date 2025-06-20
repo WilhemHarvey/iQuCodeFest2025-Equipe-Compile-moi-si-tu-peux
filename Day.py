@@ -74,7 +74,6 @@ class Day:
             if player_to_kill in self.couple:
                 new_qc = QuantumCircuit(2)
                 new_qc.append(qc, [0])
-                new_qc.h(0)
                 new_qc.cx(0, 1)
                 qc = new_qc
 
