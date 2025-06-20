@@ -124,4 +124,4 @@ class Night:
                 self.qc.cx(0,1)
                 self.endangered_players.append(self.lover_in_danger)
 
-        return self.night_circuit, self.endangered_players
+        return self.qc, self.endangered_players

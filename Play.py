@@ -94,6 +94,7 @@ class Play:
                 print(f"{player}: {self.active_player_roles[role]}")
 
             # Night phase
+            self.NIGHT = True
             print("\nThe village falls asleep...")
             # Cupid if first night only
             if self.tour_count ==1:
@@ -119,9 +120,13 @@ class Play:
             
             
             self.night_phase()
+            self.NIGHT = False
+            self.DAY = True
 
             # Day phase
             self.day_phase()
+            self.DAY = False
+            self.NIGHT = True
 
             # After the end of one entire tour, check of the end conditions
             self.CONTINUE = self.check_end_conditions()
