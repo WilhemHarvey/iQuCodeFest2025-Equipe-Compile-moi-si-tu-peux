@@ -198,6 +198,106 @@ def werewolf(
     return input_text, False
 
 
+def saviour(
+    screen,
+    input_text,
+    image_objects,
+    text_objects,
+    screen_dim,
+    game_variables,
+):
+    moon = image_objects[11]
+    moon = pygame.transform.scale(moon, (screen_dim[0] / 8, screen_dim[1] / 8))
+    screen.blit(moon, (7 * screen_dim[0] / 8, 1 * screen_dim[1] / 64))
+
+    card = image_objects[10]
+    card = pygame.transform.scale(card, (screen_dim[0] / 3, screen_dim[0] / 3))
+
+    screen.blit(
+        card,
+        ((screen_dim[0] / 2) - (card.get_width() / 2), screen_dim[1] / 6),
+    )
+    # Title
+    title = text_objects[15]
+    screen.blit(title, (screen_dim[1] / 16, screen_dim[1] / 16))
+
+    # Prompt
+    prompt = text_objects[20]
+    screen.blit(
+        prompt,
+        (
+            (screen_dim[0] / 2) - (prompt.get_width() / 2),
+            11 * (screen_dim[1] / 16),
+        ),
+    )
+    # INPUT
+    input_text_to_screen = title_font.render(input_text, True, "Yellow")
+    screen.blit(
+        input_text_to_screen,
+        (
+            (screen_dim[0] / 2) - (input_text_to_screen.get_width() / 2),
+            13 * (screen_dim[1] / 16),
+        ),
+    )
+    input_text, target = get_text(
+        screen, input_text, text_objects[14], screen_dim, game_variables
+    )
+
+    if target is not None:
+        input_text = ""
+        return target, True
+    return input_text, False
+
+def thief(
+    screen,
+    input_text,
+    image_objects,
+    text_objects,
+    screen_dim,
+    game_variables,
+):
+    moon = image_objects[11]
+    moon = pygame.transform.scale(moon, (screen_dim[0] / 8, screen_dim[1] / 8))
+    screen.blit(moon, (7 * screen_dim[0] / 8, 1 * screen_dim[1] / 64))
+
+    card = image_objects[9]
+    card = pygame.transform.scale(card, (screen_dim[0] / 3, screen_dim[0] / 3))
+
+    screen.blit(
+        card,
+        ((screen_dim[0] / 2) - (card.get_width() / 2), screen_dim[1] / 6),
+    )
+    # Title
+    title = text_objects[15]
+    screen.blit(title, (screen_dim[1] / 16, screen_dim[1] / 16))
+
+    # Prompt
+    prompt = text_objects[21]
+    screen.blit(
+        prompt,
+        (
+            (screen_dim[0] / 2) - (prompt.get_width() / 2),
+            11 * (screen_dim[1] / 16),
+        ),
+    )
+    # INPUT
+    input_text_to_screen = title_font.render(input_text, True, "Yellow")
+    screen.blit(
+        input_text_to_screen,
+        (
+            (screen_dim[0] / 2) - (input_text_to_screen.get_width() / 2),
+            13 * (screen_dim[1] / 16),
+        ),
+    )
+    input_text, target = get_text(
+        screen, input_text, text_objects[14], screen_dim, game_variables
+    )
+
+    if target is not None:
+        input_text = ""
+        return target, True
+    return input_text, False
+
 def get_text(screen, input_text, error_text, screen_dim, game_variables):
     for event in pygame.event.get():
         if event.type == pygame.quit:

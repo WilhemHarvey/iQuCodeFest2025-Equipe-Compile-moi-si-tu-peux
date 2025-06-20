@@ -163,4 +163,26 @@ def get_texts():
         )
     )
 
+
+    # 20
+    input_font_saviour = input_font = pygame.font.Font(None, 40)
+    text_objects.append(
+        input_font_seer.render(
+            "The saviour wakes up! Enter the name of the player to protect",
+            True,
+            "Yellow",
+        )
+    )
+
+    # 21
+    input_font_saviour = input_font = pygame.font.Font(None, 40)
+    text_objects.append(
+        input_font_seer.render(
+            "The thief wakes up! Enter the name of the player swap role with",
+            True,
+            "Yellow",
+        )
+    )
+
+
     return text_objects
