@@ -144,7 +144,8 @@ class Night:
             additional_qubits = QuantumRegister(1)
             self.qc.add_register(additional_qubits)            
             self.qc.append(lover_qc, self.qc.qubits[:])            
-            self.endangered_players.append(self.lover_in_danger)        
+            self.endangered_players.append(self.in_love[1])       
+
         elif self.in_love[1] in self.endangered_players:
             lover_qc = QuantumCircuit(num+1)
             lover_qubit_index = num+1            
@@ -153,6 +154,6 @@ class Night:
             additional_qubits = QuantumRegister(1)
             self.qc.add_register(additional_qubits)            
             self.qc.append(lover_qc, self.qc.qubits[:])            
-            self.endangered_players.append(self.lover_in_danger)        
+            self.endangered_players.append(self.in_love[0])        
     
         return self.qc, self.endangered_players

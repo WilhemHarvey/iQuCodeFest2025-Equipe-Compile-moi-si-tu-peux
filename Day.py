@@ -12,6 +12,7 @@ from scipy.optimize import minimize
 
 # Creation of quantum circuits
 from qiskit import QuantumCircuit
+from qiskit import QuantumRegister
 
 # Structure used to build Hamiltonians
 from qiskit.quantum_info import SparsePauliOp
@@ -65,28 +66,27 @@ class Day:
 
         return killed_players, self.roles
 
-    def hunter(self, player_to_kill: int):
+    def hunter(self, player_to_kill: int):   
 
-        players_to_kill = [player_to_kill]
+        players_to_kill = [player_to_kill]     
         qc = QuantumCircuit(1)
-        qc.rx(2 * np.arcsin(np.sqrt(0.9)), 0)
-
+        qc.rx(2 * np.arcsin(np.sqrt(0.9)), 0)        
         if self.couple is not None:
             if player_to_kill in self.couple:
-                new_qc = QuantumCircuit(2)
-                new_qc.append(qc, [0])
-                new_qc.cx(0, 1)
-                qc = new_qc
-
-        res_bitstring = run_circuit(qc)
-
-        killed_players = []
+                additional_qubit = QuantumRegister(1)
+                qc.add_register(additional_qubit)
+                new_qc = QuantumCircuit(qc.num_qubits)
+                new_qc.append(qc, qc.qubits[:])
+                new_qc.cx(0, new_qc.num_qubits-1)                
+                qc = new_qc        
+        res_bitstring = run_circuit(qc)        
+        killed_players = []   
 
         for faith, player in zip(res_bitstring, players_to_kill):
             if faith == "1":
                 killed_players.append(player)
-                self.roles[player] = None
-
+            self.roles[player] = None        
+                
         return killed_players, self.roles
 
     def vote(self, ballot: int) -> bool:
