@@ -97,10 +97,11 @@ class Play:
                     self.couple = [self.name2index(player1), self.name2index(player2)]
             self.night_phase()
 
-
-
             # Day phase
             self.day_phase()
+
+            # After the end of one entire tour, check of the end conditions
+            self.CONTINUE = self.check_end_conditions()
 
     def assign_roles(self):
         """
@@ -227,6 +228,35 @@ class Play:
         elif voted_player_is_killed == False :
             print(f"\n {voted_player_name} survived the villagers execution attempt!")
 
+
+    def check_end_conditions(self) -> bool:
+        """
+        Checks the end conditions of the game.
+        Returns True if the game should continue, False otherwise.
+        """
+       
+        werewolves_count = 0
+        villagers_count = 0
+
+        for role in self.active_player_roles:
+            if role == "Werewolf":
+                werewolves_count += 1
+            elif role is None:
+                pass
+            else: 
+                villagers_count += 1
+            
+        # winning conditions: 
+        if werewolves_count == 0:
+            print("\nAll the Werewolves have been killed. The villagers have won the game!")
+            return False
+        elif werewolves_count > villagers_count:
+            print("\nThere are now less villagers alive than Werewolves. The werewolves have won the game!")
+            return False
+        else:
+            return True
+    
+        
 
     def name2index(self, name:str) -> int:
         """
