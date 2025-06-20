@@ -107,7 +107,7 @@ def night_results(
     screen.blit(title, (screen_dim[1] / 16, screen_dim[1] / 16))
 
     # Prompt
-    prompt = text_objects[23]
+    prompt = text_objects[24]
     screen.blit(
         prompt,
         (
