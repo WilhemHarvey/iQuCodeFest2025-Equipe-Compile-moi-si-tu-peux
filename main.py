@@ -180,6 +180,8 @@ while True:
                 night_obj.Werewolf(input_text)
                 night_phase_step += 1
                 endangered_player = input_text
+        
+        # Witch
         elif night_phase_step == 2:
             if (
                 not "Witch" in game_variables.player_roles
@@ -196,5 +198,33 @@ while True:
                     game_variables,
                 )
 
+         # Savior
+        elif night_phase_step == 3:
+            input_text, player_chosen = night_functions.savior(
+                screen,
+                input_text,
+                image_objects,
+                text_objects,
+                screen_dim,
+                game_variables,
+            )
+            if player_chosen == True:
+                night_obj.Savior(input_text)
+                night_phase_step += 1
+                endangered_player = input_text
+
+        elif night_phase_step == 4:
+            input_text, player_chosen = night_functions.thief(
+                screen,
+                input_text,
+                image_objects,
+                text_objects,
+                screen_dim,
+                game_variables,
+            )
+            if player_chosen == True:
+                night_obj.Thief(input_text)
+                night_phase_step += 1
+                endangered_player = input_text
     pygame.display.update()
     clock.tick(60)

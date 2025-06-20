@@ -198,7 +198,7 @@ def werewolf(
     return input_text, False
 
 
-def saviour(
+def savior(
     screen,
     input_text,
     image_objects,
