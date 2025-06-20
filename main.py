@@ -298,16 +298,36 @@ while True:
             )
             if player_chosen == True:
                 killed, new_roles = day_object.vote(input_text)
+                killed_player_roles = []
+                killed_player_names=[]
                 if killed:
-                    killed_player_roles = game_variables.player_roles[input_text]
-                    killed_player_names = game_variables.ind2name(input_text)
+                    killed_player_roles = [game_variables.player_roles[input_text]]
+                    killed_player_names = [game_variables.ind2name[input_text]]
                     game_variables.player_roles = new_roles
-                night_phase_step += 1
-                
+
+                day_phase_step += 1
+
+
                 endangered_player = game_variables.ind2name[input_text]
                 input_text = ""
         elif day_phase_step == 2:
-            pass
+            day_functions.vote_results(
+                screen,
+                image_objects,
+                text_objects,
+                screen_dim,
+                killed_player_roles,
+                killed_player_names,
+            )
+            for event in pygame.event.get():
+                if event.type == pygame.quit:
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        day_phase_step += 1
+                        input_text = ""
+            
         else:
             pass
 
