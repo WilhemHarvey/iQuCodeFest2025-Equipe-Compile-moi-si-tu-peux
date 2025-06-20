@@ -201,8 +201,10 @@ while True:
                 )
                 if choice_made == True:
                     if input_text == "save":
+                        game_variables.witch_power[0] = False
                         night_obj.Witch(save_attacked_player=True)
-                    else:
+                    if not input_text == "nothing":
+                        game_variables.witch_power[1] = False
                         night_obj.Witch(attack_player_index=input_text)
                     night_phase_step += 1
                     input_text = ""
@@ -221,6 +223,7 @@ while True:
                 night_obj.Savior(input_text)
                 night_phase_step += 1
                 endangered_player = input_text
+                input_text = ""
 
         elif night_phase_step == 4:
             input_text, player_chosen = night_functions.thief(
@@ -235,5 +238,6 @@ while True:
                 night_obj.Thief(input_text)
                 night_phase_step += 1
                 endangered_player = input_text
+                input_text = ""
     pygame.display.update()
     clock.tick(60)
