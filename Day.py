@@ -6,7 +6,7 @@ from utils import run_circuit
 import matplotlib.pyplot as plt
 import networkx as nx
 
-# Matricial computation and classical optimization
+# Matricial computation and calssical optimization
 import numpy as np
 from scipy.optimize import minimize
 
@@ -34,7 +34,7 @@ from qiskit_aer import AerSimulator
 # Simulators of existing quantum computers
 from qiskit_ibm_runtime.fake_provider import FakeNairobiV2  # , FakeQuebec
 
-# Visualization of probability distributions
+# Visualization of probablity distributions
 from qiskit.visualization import plot_histogram
 
 
@@ -42,17 +42,6 @@ from utils import run_circuit
 
 
 class Day:
-    """
-    Represents the daytime phase in the game, handling quantum-based decisions
-    such as voting, hunter actions, and night measures.
-
-    Attributes:
-        night_circuit (QuantumCircuit): Quantum circuit used during the night phase.
-        endangered_players (list): List of players endangered during the night.
-        roles (list): List of roles assigned to players.
-        couple (None or list): Represents the couple in the game, if any.
-    """
-
     def __init__(
         self,
         night_circuit: QuantumCircuit,
@@ -60,88 +49,67 @@ class Day:
         roles: list,
         couple: None,
     ):
-        """
-        Initializes the Day class with the given attributes.
+        self.night_circuit = night_circuit
+        self.roles = roles
+        self.endangered_players = endangered_players
+        self.couple = couple
 
-        Args:
-            night_circuit (QuantumCircuit): Quantum circuit used during the night phase.
-            endangered_players (list): List of players endangered during the night.
-            roles (list): List of roles assigned to players.
-            couple (None or list): Represents the couple in the game, if any.
-        """
-        self.night_circuit = night_circuit  # Quantum circuit for night phase
-        self.roles = roles  # Roles assigned to players
-        self.endangered_players = endangered_players  # Players endangered during the night
-        self.couple = couple  # Couple in the game, if any
+    def night_measures(self):   
 
-    def night_measures(self):
-        """
-        Executes the night circuit and determines which players are killed.
+        res_bitstring = run_circuit(self.night_circuit)
 
-        Returns:
-            tuple: A list of killed players and the updated roles.
-        """
-        res_bitstring = run_circuit(self.night_circuit)  # Run the night quantum circuit
-
-        killed_players = []  # List to store killed players
+        killed_players = []
         for faith, player in zip(res_bitstring, self.endangered_players):
-            if faith == "1":  # Check if the player is killed
+            if faith == "1":
                 killed_players.append(player)
+                # self.roles[player] = None
 
-        return killed_players, self.roles  # Return killed players and updated roles
+        return killed_players, self.roles
 
-    def hunter(self, player_to_kill: int):
-        """
-        Handles the hunter's action to kill a player, considering the couple's relationship.
+    def hunter(self, player_to_kill: int):   
 
-        Args:
-            player_to_kill (int): The index of the player to kill.
-
-        Returns:
-            tuple: A list of killed players and the updated roles.
-        """
-        players_to_kill = [player_to_kill]  # List of players to kill
-        qc = QuantumCircuit(1)  # Create a single-qubit quantum circuit
-        qc.rx(2 * np.arcsin(np.sqrt(0.9)), 0)  # Apply rotation to simulate probability
-
-        if self.couple is not None:  # Check if there is a couple
-            if player_to_kill in self.couple:  # If the player is part of the couple
-                additional_qubit = QuantumRegister(1)  # Add an additional qubit
-                qc.add_register(additional_qubit)  # Add the register to the circuit
-                new_qc = QuantumCircuit(qc.num_qubits)  # Create a new circuit
-                new_qc.append(qc, qc.qubits[:])  # Append the original circuit
-                new_qc.cx(0, new_qc.num_qubits - 1)  # Add a controlled-X gate
-                qc = new_qc  # Update the circuit
-
-        res_bitstring = run_circuit(qc)  # Run the quantum circuit
-        killed_players = []  # List to store killed players
+        players_to_kill = [player_to_kill]     
+        qc = QuantumCircuit(1)
+        qc.rx(2 * np.arcsin(np.sqrt(0.9)), 0)        
+        if self.couple is not None:
+            if player_to_kill in self.couple:
+                additional_qubit = QuantumRegister(1)
+                qc.add_register(additional_qubit)
+                new_qc = QuantumCircuit(qc.num_qubits)
+                new_qc.append(qc, qc.qubits[:])
+                new_qc.cx(0, new_qc.num_qubits-1)                
+                qc = new_qc        
+        res_bitstring = run_circuit(qc)        
+        killed_players = []   
 
         for faith, player in zip(res_bitstring, players_to_kill):
-            if faith == "1":  # Check if the player is killed
+            if faith == "1":
                 killed_players.append(player)
-            self.roles[player] = None  # Update the player's role to None
-
-        return killed_players, self.roles  # Return killed players and updated roles
+            self.roles[player] = None        
+                
+        return killed_players, self.roles
 
     def vote(self, ballot: int) -> bool:
         """
-        Decides if the voted player dies or not based on a quantum circuit.
+        Decides if the voted player dies or not.
 
         Args:
-            ballot (int): The index of the voted player.
+            ballot (int): the position of the voted player in the players array
 
-        Returns:
-            tuple: A boolean indicating if the player was killed and the updated roles.
+        returns:
+            bool: True if the player has been killed, else False
+
         """
-        circuit = QuantumCircuit(1)  # Create a single-qubit quantum circuit
 
-        theta = np.pi * 2 / 3  # Define the rotation angle
-        circuit.rx(theta, 0)  # Apply rotation to simulate probability
+        circuit = QuantumCircuit(1)
 
-        result_bit = run_circuit(circuit)  # Run the quantum circuit
+        theta = np.pi * 2 / 3
+        circuit.rx(theta, 0)
 
-        if result_bit == "1":  # Check if the player is killed
-            self.roles[ballot] = None  # Update the player's role to None
-            return True, self.roles  # Return True and updated roles
+        result_bit = run_circuit(circuit)
 
-        return False, self.roles  # Return False and updated roles
+        if result_bit == "1":
+            self.roles[ballot] = None
+            return True, self.roles
+
+        return False, self.roles
