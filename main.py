@@ -259,15 +259,57 @@ while True:
             )
             day_phase_step = 0
 
-            
     elif game_step == 6:
         screen.fill((135, 206, 235))
         if day_phase_step == 0:
             killed_players, new_roles = day_object.night_measures()
-        killed_player_names = []
-        for player in killed_players:
-            killed_player_names.append(game_variables.ind2name(player))
-        game_variables.player_roles = new_roles
+            killed_player_names = []
+            killed_player_roles = []
+            for player in killed_players:
+                killed_player_roles.append(game_variables.player_roles[player])
+                killed_player_names.append(game_variables.ind2name(player))
+
+            game_variables.player_roles = new_roles
+
+            day_functions.night_results(
+                screen,
+                image_objects,
+                text_objects,
+                screen_dim,
+                killed_player_roles,
+                killed_player_names,
+            )
+            for event in pygame.event.get():
+                if event.type == pygame.quit:
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        day_phase_step += 1
+                        input_text = ""
+        elif day_phase_step == 1:
+            input_text, player_chosen = day_functions.vote(
+                screen,
+                input_text,
+                image_objects,
+                text_objects,
+                screen_dim,
+                game_variables,
+            )
+            if player_chosen == True:
+                killed, new_roles = day_object.vote(input_text)
+                if killed:
+                    killed_player_roles = game_variables.player_roles[input_text]
+                    killed_player_names = game_variables.ind2name(input_text)
+                    game_variables.player_roles = new_roles
+                night_phase_step += 1
+                
+                endangered_player = game_variables.ind2name[input_text]
+                input_text = ""
+        elif day_phase_step == 2:
+            pass
+        else:
+            pass
 
     pygame.display.update()
     clock.tick(60)

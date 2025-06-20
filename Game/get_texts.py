@@ -163,7 +163,6 @@ def get_texts():
         )
     )
 
-
     # 20
     input_font_saviour = input_font = pygame.font.Font(None, 40)
     text_objects.append(
@@ -190,9 +189,27 @@ def get_texts():
         title_font.render(
             "The village is awake: Day phase",
             True,
-            "Yellow",
+            "Black",
         )
     )
 
+    # 23
+    input_font_werewolf = input_font = pygame.font.Font(None, 40)
+    text_objects.append(
+        input_font_werewolf.render(
+            "It's time for the vote. Enter the player that the village voted for to pass the vote test: ",
+            True,
+            "Black",
+        )
+    )
+    # 23
+    title_font = pygame.font.Font(None, 70)
+    text_objects.append(
+        title_font.render(
+            "Results of the vote:",
+            True,
+            "Black",
+        )
+    )
 
     return text_objects

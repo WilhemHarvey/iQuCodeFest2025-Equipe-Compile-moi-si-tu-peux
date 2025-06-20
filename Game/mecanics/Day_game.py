@@ -53,12 +53,12 @@ class Day:
         self.endangered_players = endangered_players
         self.couple = couple
 
-    def night_measures(self):   
+    def night_measures(self):
 
         res_bitstring = run_circuit(self.night_circuit)
 
         killed_players = []
-        for player, faith in zip(res_bitstring, self.endangered_players):
+        for faith, player in zip(res_bitstring, self.endangered_players):
             if faith == "1":
                 killed_players.append(player)
                 # self.roles[player] = None
@@ -81,7 +81,7 @@ class Day:
 
         killed_players = []
 
-        for player, faith in zip(res_bitstring, self.endangered_players):
+        for faith, player in zip(res_bitstring, self.endangered_players):
             if faith == "1":
                 killed_players.append(player)
                 self.roles[player] = None
@@ -103,7 +103,7 @@ class Day:
         circuit = QuantumCircuit(1)
 
         theta = np.pi * 2 / 3
-        circuit.rx(theta)
+        circuit.rx(theta, 0)
 
         result_bit = run_circuit(circuit)
 
