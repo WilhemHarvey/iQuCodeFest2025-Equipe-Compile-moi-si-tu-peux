@@ -72,6 +72,7 @@ class Night:
 
 
         return
+    
 
     def Seer(self, player_index):
         if self.roles_list[player_index] == None:
