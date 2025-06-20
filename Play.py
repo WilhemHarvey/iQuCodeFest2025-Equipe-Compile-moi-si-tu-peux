@@ -248,7 +248,8 @@ class Play:
             dead_players_night_role = self.active_player_roles[i]
             self.active_player_roles[i] = None # Mark the player as dead
             
-            print(f"\n {dead_players_night_name} was killed during the. His role was {dead_players_night_role}.")
+            print(f"\n {dead_players_night_name} was killed during the night. His role was {dead_players_night_role}.")
+
             if dead_players_night_role == "Hunter":
                 INPUT = True
                 while INPUT:
