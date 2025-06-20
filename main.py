@@ -288,7 +288,24 @@ while True:
                         day_phase_step += 1
                         input_text = ""
         elif day_phase_step == 1:
-            pass
+            input_text, player_chosen = day_functions.vote(
+                screen,
+                input_text,
+                image_objects,
+                text_objects,
+                screen_dim,
+                game_variables,
+            )
+            if player_chosen == True:
+                killed, new_roles = day_object.vote(input_text)
+                if killed:
+                    killed_player_roles = game_variables.player_roles[input_text]
+                    killed_player_names = game_variables.ind2name(input_text)
+                    game_variables.player_roles = new_roles
+                night_phase_step += 1
+                
+                endangered_player = game_variables.ind2name[input_text]
+                input_text = ""
         elif day_phase_step == 2:
             pass
         else:
