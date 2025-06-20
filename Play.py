@@ -44,6 +44,9 @@ class Play:
         self.endangered_players = []  
         
 
+        self.N_circuit = None
+        self.N_endangered_players = None
+
         ##### Initialize the game #####
         print(f"Please enter the number of players for the role of: ")
         for role in self.ROLES:
@@ -176,7 +179,10 @@ class Play:
         """
         print("\nThe village wakes up...")
 
+        day = Day(self.N_circuit, self.N_endangered_players, self.active_player_roles,self.couple)
+
         # Voting phase
+<<<<<<< Updated upstream
         votes = {}
         for player in self.players.keys():
             vote = str(input(f"{player}, who do you want to vote for? (Enter player name): ").strip())
@@ -184,22 +190,30 @@ class Play:
                 votes[vote] = votes.get(vote, 0) + 1
             else:
                 print(f"{vote} is not a valid player.")
+=======
+        voted_player_name = str(
+            input("Game master, who does the village vote for? (Enter player name): ")
+        )
+        voted_player_index = self.name2index(voted_player_name)
+        voted_player_role = self.active_player_roles[voted_player_index]
 
-        # Determine the player with the most votes
-        if votes:
-            max_votes = max(votes.values())
-            voted_players = [
-                player for player, count in votes.items() if count == max_votes
-            ]
+        voted_player_is_killed, self.active_player_roles = Day.vote(Day, voted_player_index)
 
-            if len(voted_players) == 1:
-                killed_player = voted_players[0]
-                print(f"{killed_player} has been voted out!")
-                del self.players[killed_player]
-            else:
-                print("No clear decision was made, no one is voted out.")
-        else:
-            print("No votes were cast.")
+        if voted_player_is_killed == True :
+            print(f"\n {voted_player_name} was killed as a result of the vote. His role was {voted_player_role}.")
+            if voted_player_role == "Hunter" :
+                hunter_victim_name = str(input("Who does the hunter want to kill? (Enter player name): "))
+                hunter_victim_index = self.name2index(hunter_victim_name)
+                hunter_victim_role = self.roles(hunter_victim_index)
+                dead_players, self.roles = Day.hunter(Day,hunter_victim_index)
+                if len(dead_players) == 1 :
+                    print(f"\n {hunter_victim_name} was killed as a result of the vote. His role was {hunter_victim_role}.")
+
+        elif voted_player_is_killed == False :
+            print(f"\n {voted_player_name} survived the villagers execution attempt!")
+>>>>>>> Stashed changes
+
+
 
     def name2index(self, name:str) -> int:
         """
