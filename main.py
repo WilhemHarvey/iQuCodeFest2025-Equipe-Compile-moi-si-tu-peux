@@ -391,7 +391,9 @@ while True:
             if to_continue:
                 game_step=5
             else:
-                game_step=6
+                game_step=7
+                night_phase_step=0
+                day_phase_step=0
 
     pygame.display.update()
     clock.tick(60)
