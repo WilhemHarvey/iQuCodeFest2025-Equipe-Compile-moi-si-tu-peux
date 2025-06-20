@@ -182,7 +182,7 @@ while True:
                 endangered_player = game_variables.ind2name[input_text]
                 input_text = ""
 
-        # Witch
+        ## Witch
         elif night_phase_step == 2:
             if (
                 not "Witch" in game_variables.player_roles
@@ -190,14 +190,22 @@ while True:
             ):
                 night_phase_step += 1
             else:
-                input_text, choice_made = night_functions.werewolf(
+                input_text, choice_made = night_functions.witch(
                     screen,
                     input_text,
                     image_objects,
                     text_objects,
                     screen_dim,
                     game_variables,
+                    endangered_player,
                 )
+                if choice_made == True:
+                    if input_text == "save":
+                        night_obj.Witch(save_attacked_player=True)
+                    else:
+                        night_obj.Witch(attack_player_index=input_text)
+                    night_phase_step += 1
+                    input_text = ""
 
         # Savior
         elif night_phase_step == 3:
