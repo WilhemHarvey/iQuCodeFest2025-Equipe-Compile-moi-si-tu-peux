@@ -239,9 +239,10 @@ while True:
                     game_variables,
                 )
                 if player_chosen == True:
-                    game_variables.player_roles, game_variables.couple = (
+                    game_variables.player_roles = (
                         night_obj.Thief(input_text)
                     )
+                    game_variables.couple=night_obj.in_love
                     night_phase_step += 1
                     endangered_player = input_text
                     input_text = ""

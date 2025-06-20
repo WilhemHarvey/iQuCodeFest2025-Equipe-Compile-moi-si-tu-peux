@@ -53,7 +53,7 @@ class Day:
         self.endangered_players = endangered_players
         self.couple = couple
 
-    def night_measures(self):
+    def night_measures(self):   
 
         res_bitstring = run_circuit(self.night_circuit)
 
@@ -61,7 +61,7 @@ class Day:
         for faith, player in zip(res_bitstring, self.endangered_players):
             if faith == "1":
                 killed_players.append(player)
-                self.roles[player] = None
+                # self.roles[player] = None
 
         return killed_players, self.roles
 
