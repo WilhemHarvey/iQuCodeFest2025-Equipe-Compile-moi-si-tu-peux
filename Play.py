@@ -3,7 +3,7 @@ import random
 from Day import *
 from Night import *
 
-# TODO: handles the exception raised, the program must not stop but just start over 
+# TODO: handles the exception raised, the program must not stop but just start over
 # exactly at the same state as before the exception was raised
 # TODO: handles all cases where the user does not enter a valid input ! 
 
@@ -11,16 +11,26 @@ class Play:
 
     def __init__(self):
 
-
         # Attributes related to the players and their roles
         self.player_names = []
         self.player_count = 0
-        self.ROLES = ['Villager','Werewolf','Cupid', 'Witch','Hunter', 
-                      'Seer','Captain', 'Thief', 'Savior']
+        self.ROLES = [
+            "Villager",
+            "Werewolf",
+            "Cupid",
+            "Witch",
+            "Hunter",
+            "Seer",
+            "Captain",
+            "Thief",
+            "Savior",
+        ]
         self.role_counts = []
         self.active_player_roles = []
         self.active_players = {}
-        self.ind2name = [] # list containing the name of the players, at the index of their role
+        self.ind2name = (
+            []
+        )  # list containing the name of the players, at the index of their role
 
         # Attributes related to the game state
         self.CONTINUE = True
@@ -36,16 +46,16 @@ class Play:
 
         ##### Initialize the game #####
         print(f"Please enter the number of players for the role of: ")
-        for role in self.roles:
+        for role in self.ROLES:
             count = int(input(f"{role}: "))
             if count >= 0:  # Validate for non-negative numbers
                 self.role_counts.append(count)
                 self.player_count += count
-                for i in range(count): 
+                for i in range(count):
                     self.active_player_roles.append(role)
-            else: 
+            else:
                 raise ValueError("\nPlease enter a valid non-negative integer number")
-    
+
         # print(self.active_player_roles)
 
         print(f"\nPlease enter the names of the {self.player_count} players:")
@@ -55,14 +65,13 @@ class Play:
 
         self.active_players, self.ind2name = self.assign_roles()
 
-
         print("\nAssigned Players and Roles:")
         for player, role in self.active_players.items():
-                print(f"{player}: {self.active_player_roles[role]}")
+            print(f"{player}: {self.active_player_roles[role]}")
 
         ##### Launch the game #####
 
-        while self.CONTINUE: 
+        while self.CONTINUE:
 
             # Start a new tour
             self.tour_count += 1
@@ -70,7 +79,7 @@ class Play:
             print("Active players and their roles:")
             for player, role in self.active_players.items():
                 print(f"{player}: {self.active_player_roles[role]}")
-            
+
             # Night phase
             print("\nThe village falls asleep...")
             # Cupid if first night only
@@ -86,9 +95,8 @@ class Play:
 
             # Day phase
             self.day_phase()
-        
 
-    def assign_roles(self):  
+    def assign_roles(self):
         """
         Assigns roles to players based on the specified counts.
         Returns a dictionary mapping player names to their assigned roles.
@@ -104,11 +112,9 @@ class Play:
             players[self.player_names[player_id]] = role_index
             ind2name[role_index] = self.player_names[player_id]
 
-
         return players, ind2name
-    
 
-    def night_phase(self): 
+    def night_phase(self):
         """
         Handles the night phase of the game, including player actions and role-specific abilities.
         """
@@ -118,7 +124,7 @@ class Play:
                       self.witch_power, self.couple)
 
         # Role-specific actions during the night
-        if 'Seer' in self.active_player_roles:
+        if "Seer" in self.active_player_roles:
             print("\nThe Seer wakes up...")
             player_name = str(input("Which player role do you want to see? (Enter player name): "))
             role = night.Clairvoyante(self.name2index(player_name))
@@ -182,7 +188,9 @@ class Play:
         # Determine the player with the most votes
         if votes:
             max_votes = max(votes.values())
-            voted_players = [player for player, count in votes.items() if count == max_votes]
+            voted_players = [
+                player for player, count in votes.items() if count == max_votes
+            ]
 
             if len(voted_players) == 1:
                 killed_player = voted_players[0]
@@ -201,8 +209,8 @@ class Play:
             return self.active_players[name]
         else:
             raise ValueError(f"Player {name} not found in active players.")
-        
-    def index2name(self, index:int) -> str:
+
+    def index2name(self, index: int) -> str:
         """
         Converts a player index to its name in the active players list.
         """
@@ -210,8 +218,8 @@ class Play:
             return self.ind2name[index]
         else:
             raise ValueError(f"Index {index} is out of bounds for active players.")
-        
-    
+
+
 if __name__ == "__main__":
     play = Play()
     print("\nAssigned Players and Roles:")
