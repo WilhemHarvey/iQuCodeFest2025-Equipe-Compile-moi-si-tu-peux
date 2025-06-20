@@ -246,7 +246,7 @@ class Play:
 
         day = Day(self.N_circuit, self.N_endangered_players, self.active_player_roles,self.couple)
 
-        dead_players_night, self.active_player_roles = Day.night_measures(Day)
+        dead_players_night, self.active_player_roles = Day.night_measures()
         for i in dead_players_night :
             dead_players_night_name = self.index2name(i)
             dead_players_night_role = self.active_player_roles[i]
