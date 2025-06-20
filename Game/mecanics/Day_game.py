@@ -61,7 +61,7 @@ class Day:
         for faith, player in zip(res_bitstring, self.endangered_players):
             if faith == "1":
                 killed_players.append(player)
-                # self.roles[player] = None
+                self.roles[player] = None
 
         return killed_players, self.roles
 
