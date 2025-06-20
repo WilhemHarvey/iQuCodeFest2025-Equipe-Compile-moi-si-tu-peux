@@ -85,5 +85,21 @@ def get_texts():
             "Red",
         )
     )
+    # 11
+    text_objects.append(
+        title_font.render(
+            "Enter the name of the players: write one player's name, then press enter.",
+            True,
+            "Red",
+        )
+    )
+    # 12
+    text_objects.append(
+        title_font.render(
+            "There can not be empty or duplicate names. Try again",
+            True,
+            "Red",
+        )
+    )
 
     return text_objects
