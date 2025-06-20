@@ -163,7 +163,6 @@ def get_texts():
         )
     )
 
-
     # 20
     input_font_saviour = input_font = pygame.font.Font(None, 40)
     text_objects.append(
@@ -193,6 +192,14 @@ def get_texts():
             "Yellow",
         )
     )
-
+    # 23
+    title_font = pygame.font.Font(None, 70)
+    text_objects.append(
+        title_font.render(
+            "Results of the vote:",
+            True,
+            "Black",
+        )
+    )
 
     return text_objects
