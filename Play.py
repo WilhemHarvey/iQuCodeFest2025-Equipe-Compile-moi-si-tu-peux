@@ -221,12 +221,6 @@ class Play:
                 victim_lover_name = self.index2name(victim_lover_index)
                 print(f"\n {voted_player_name} was in love with {victim_lover_name}, which means that{victim_lover_name} is also dead. His role was {victim_lover_role}.")
                 self.lover_dead == True
-                if victim_lover_role =="Hunter":
-                    hunter_victim_name = str(input("Who does the hunter want to kill? (Enter player name): "))
-                    hunter_victim_index = self.name2index(hunter_victim_name)
-                    hunter_victim_role = self.roles(hunter_victim_index)
-                    dead_players, self.roles = day.hunter(day,hunter_victim_index)
-                    print(f"\n {hunter_victim_name} was killed by the hunter. His role was {hunter_victim_role}.")
             if voted_player_role == "Hunter" :
                 hunter_victim_name = str(input("Who does the hunter want to kill? (Enter player name): "))
                 hunter_victim_index = self.name2index(hunter_victim_name)
@@ -240,8 +234,15 @@ class Play:
                 elif len(dead_players) == 2 and self.lover_dead == False:
                     print(f"\n {hunter_victim_name} was killed aby the hunter. His role was {hunter_victim_role}.")
                     print(f"\n {hunter_victim_name} was in love with {hunter_victim_lover_name}, which means that{hunter_victim_lover_name} is also dead killed. His role was {hunter_victim_lover_role}.")
-                else :
-                    raise ValueError("Error with the hunter is trying to kill his dead GF")
+            if victim_lover_role == "Hunter" : 
+                hunter_victim_name = str(input("Who does the hunter want to kill? (Enter player name): "))
+                hunter_victim_index = self.name2index(hunter_victim_name)
+                hunter_victim_role = self.roles(hunter_victim_index)
+                hunter_victim_lover_index = [player for player in self.couple if player != hunter_victim_index][0]
+                hunter_victim_lover_name = self.index2name(hunter_victim_lover_name)
+                hunter_victim_lover_role = self.roles[hunter_victim_lover_index]
+                dead_players, self.roles = day.hunter(day,hunter_victim_index)
+                print(f"\n {hunter_victim_name} was killed by the hunter. His role was {hunter_victim_role}.")
         elif voted_player_is_killed == False :
             print(f"\n {voted_player_name} survived the villagers execution attempt!")
 
