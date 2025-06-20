@@ -103,7 +103,7 @@ class Day:
         circuit = QuantumCircuit(1)
 
         theta = np.pi * 2 / 3
-        circuit.rx(theta, 0)
+        circuit.rx(theta)
 
         result_bit = run_circuit(circuit)
 
