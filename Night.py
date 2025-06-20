@@ -9,10 +9,11 @@ class Night:
         self.qc = QuantumCircuit(1)
 
         self.roles_list = roles
-
         self.endangered_players = []
 
         self.in_love = couple
+        self.lover_in_danger = None
+
         self.witch_ability = witch_power
 
         self.big_attack = 2 * np.pi / 3
@@ -28,6 +29,9 @@ class Night:
 
         self.endangered_players.append(attack_player_index)
 
+        if attack_player_index in self.in_love :
+            self.lover_in_danger = attack_player_index
+
         return
 
     def Witch(
@@ -41,18 +45,20 @@ class Night:
             self.qc.rx(self.heal, 0)
             self.witch_ability[0] = False
 
-        elif (
-            attack_player != None
-            and self.witch_ability[1] != False
-            and attack_player_index != None
-        ):
-
-            if attack_player_index not in self.endangered_players:
-
-                attack_qc = QuantumCircuit(2)
-                attack_qc.rx(self.small_attack / 3, 1)
-                self.qc.append(attack_qc, [0, 1])
-                self.endangered_players.append(attack_player_index)
+        elif attack_player_index != None and self.witch_ability[1] != False :
+            
+            if self.roles_list[attack_player_index] == None :
+                raise ValueError("Trying to kill a dead player")
+        
+            if attack_player_index not in self.endangered_players :
+                if attack_player_index in self.in_love and self.couple_in_danger != None :
+                    lover_index = [player for player in self.in_love if player != attack_player_index][0]
+                    attack_qc.rx(self.small_attack/3, lover_index)
+                else :
+                    attack_qc = QuantumCircuit(2)
+                    attack_qc.rx(self.small_attack/3, 1)
+                    self.qc.append(attack_qc, [0,1])
+                    self.endangered_players.append(attack_player_index)
 
             elif attack_player_index in self.endangered_players:
                 self.qc.rx(self.small_attack, 0)
@@ -109,9 +115,13 @@ class Night:
 
         return
     
-    def finish_night(self):
+    def Finish_Night(self):
+        
+        for player in self.in_love :
+            if player in self.endangered_players :
+                lover_qc = QuantumCircuit(3)
+                self.qc.append(lover_qc, [0,1,2])
+                self.qc.cx(0,1)
+                self.endangered_players.append(self.lover_in_danger)
 
-        night_circuit = self.qc.cx(self.in_love[0], self.in_love[1])
-
-
-        return night_circuit, self.endangered_players
+        return self.night_circuit, self.endangered_players
