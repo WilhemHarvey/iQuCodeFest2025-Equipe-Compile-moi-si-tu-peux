@@ -346,7 +346,7 @@ while True:
                         day_phase_step += 1
                         input_text = ""
         elif day_phase_step == 3:
-            input_text, player_chosen = night_functions.werewolf(
+            input_text, player_chosen = day_functions.hunter(
                 screen,
                 input_text,
                 image_objects,
@@ -362,7 +362,6 @@ while True:
                     killed_player_roles = [og_roles[input_text]]
                     killed_player_names = [game_variables.ind2name[input_text]]
                     game_variables.active_player_names.remove(game_variables.ind2name[input_text])
-                    game_variables.active_player_names.remove(killed_player_names[0])
                     game_variables.player_roles = new_roles
                 day_phase_step +=1
                 
@@ -388,7 +387,11 @@ while True:
                         input_text = ""
 
         else:
-            pass
+            to_continue=game_variables.check_end_conditions()
+            if to_continue:
+                game_step=5
+            else:
+                game_step=6
 
     pygame.display.update()
     clock.tick(60)
