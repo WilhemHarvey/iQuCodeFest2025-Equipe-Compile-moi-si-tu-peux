@@ -47,6 +47,9 @@ class Play:
         self.N_circuit = None
         self.N_endangered_players = None
 
+        self.N_circuit = None
+        self.N_endangered_players = None
+
         ##### Initialize the game #####
         print(f"Please enter the number of players for the role of: ")
         for role in self.ROLES:
@@ -183,6 +186,7 @@ class Play:
 
         # Voting phase
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         votes = {}
         for player in self.players.keys():
             vote = str(input(f"{player}, who do you want to vote for? (Enter player name): ").strip())
@@ -191,11 +195,14 @@ class Play:
             else:
                 print(f"{vote} is not a valid player.")
 =======
+=======
+>>>>>>> Stashed changes
         voted_player_name = str(
             input("Game master, who does the village vote for? (Enter player name): ")
         )
         voted_player_index = self.name2index(voted_player_name)
         voted_player_role = self.active_player_roles[voted_player_index]
+<<<<<<< Updated upstream
 
         voted_player_is_killed, self.active_player_roles = Day.vote(Day, voted_player_index)
 
@@ -208,6 +215,25 @@ class Play:
                 dead_players, self.roles = Day.hunter(Day,hunter_victim_index)
                 if len(dead_players) == 1 :
                     print(f"\n {hunter_victim_name} was killed as a result of the vote. His role was {hunter_victim_role}.")
+=======
+
+        voted_player_is_killed, self.active_player_roles = Day.vote(Day, voted_player_index)
+
+        if voted_player_is_killed == True :
+            print(f"\n {voted_player_name} was killed as a result of the vote. His role was {voted_player_role}.")
+            if voted_player_role == "Hunter" :
+                hunter_victim_name = str(input("Who does the hunter want to kill? (Enter player name): "))
+                hunter_victim_index = self.name2index(hunter_victim_name)
+                hunter_victim_role = self.roles(hunter_victim_index)
+                dead_players, self.roles = Day.hunter(Day,hunter_victim_index)
+                if len(dead_players) == 1 :
+                    print(f"\n {hunter_victim_name} was killed as a result of the vote. His role was {hunter_victim_role}.")
+
+        elif voted_player_is_killed == False :
+            print(f"\n {voted_player_name} survived the villagers execution attempt!")
+
+
+>>>>>>> Stashed changes
 
         elif voted_player_is_killed == False :
             print(f"\n {voted_player_name} survived the villagers execution attempt!")
