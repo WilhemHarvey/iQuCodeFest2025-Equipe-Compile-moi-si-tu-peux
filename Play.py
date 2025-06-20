@@ -158,7 +158,8 @@ class Play:
             INPUT = True
             while INPUT:
                 player_name = self.get_valid_input("Which player role do you want to see? (Enter player name): ", str)
-                if player_name in self.active_players:
+                p_index = self.name2index(player_name)
+                if self.active_player_roles[p_index] != None:
                     INPUT = False
                 else:
                     print("\nPlease enter a valid player name...")
