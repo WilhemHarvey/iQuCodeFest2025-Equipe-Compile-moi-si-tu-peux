@@ -125,7 +125,7 @@ class Night:
             self.roles_list[player_to_steal],
             self.roles_list[stealer],
         )
-        return self.roles_list
+        return self.roles_list, self.in_love
 
     def Savior(self, player_index):
 

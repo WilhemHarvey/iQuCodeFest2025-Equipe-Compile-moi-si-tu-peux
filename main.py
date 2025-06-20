@@ -211,33 +211,57 @@ while True:
 
         # Savior
         elif night_phase_step == 3:
-            input_text, player_chosen = night_functions.savior(
-                screen,
-                input_text,
-                image_objects,
-                text_objects,
-                screen_dim,
-                game_variables,
-            )
-            if player_chosen == True:
-                night_obj.Savior(input_text)
+            if "Savior" in game_variables.player_roles:
+                input_text, player_chosen = night_functions.savior(
+                    screen,
+                    input_text,
+                    image_objects,
+                    text_objects,
+                    screen_dim,
+                    game_variables,
+                )
+                if player_chosen == True:
+                    night_obj.Savior(input_text)
+                    night_phase_step += 1
+                    endangered_player = input_text
+                    input_text = ""
+            else:
                 night_phase_step += 1
-                endangered_player = input_text
-                input_text = ""
 
         elif night_phase_step == 4:
-            input_text, player_chosen = night_functions.thief(
-                screen,
-                input_text,
-                image_objects,
-                text_objects,
-                screen_dim,
-                game_variables,
-            )
-            if player_chosen == True:
-                night_obj.Thief(input_text)
+            if "Thief" in game_variables.player_roles:
+                input_text, player_chosen = night_functions.thief(
+                    screen,
+                    input_text,
+                    image_objects,
+                    text_objects,
+                    screen_dim,
+                    game_variables,
+                )
+                if player_chosen == True:
+                    game_variables.player_roles, game_variables.couple = (
+                        night_obj.Thief(input_text)
+                    )
+                    night_phase_step += 1
+                    endangered_player = input_text
+                    input_text = ""
+            else:
                 night_phase_step += 1
-                endangered_player = input_text
-                input_text = ""
+        else:
+            quantum_circuit, endangered_players = night_obj.Finish_Night()
+            game_step += 1
+            input_text = ""
+            day_object = day_mecanics.Day(
+                quantum_circuit,
+                endangered_players,
+                game_variables.player_roles,
+                game_variables.couple,
+            )
+            day_phase_step = 0
+    elif game_step == 6:
+        screen.fill((135, 206, 235))
+        if day_phase_step == 0:
+            pass
+
     pygame.display.update()
     clock.tick(60)

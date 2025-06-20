@@ -267,6 +267,19 @@ def witch(
                 13 * (screen_dim[1] / 16),
             ),
         )
+    input_font_witch = pygame.font.Font(None, 40)
+    prompt = input_font_witch.render(
+        f"Write 'nothing' if you want to do nothing.",
+        True,
+        "Yellow",
+    )
+    screen.blit(
+        prompt,
+        (
+            (screen_dim[0] / 2) - (prompt.get_width() / 2),
+            14 * (screen_dim[1] / 16),
+        ),
+    )
 
     # INPUT
     input_text_to_screen = title_font.render(input_text, True, "Yellow")
@@ -274,9 +287,10 @@ def witch(
         input_text_to_screen,
         (
             (screen_dim[0] / 2) - (input_text_to_screen.get_width() / 2),
-            14 * (screen_dim[1] / 16),
+            15 * (screen_dim[1] / 16),
         ),
     )
+
     input_text, target = get_text_witch(
         screen, input_text, text_objects[14], screen_dim, game_variables
     )
@@ -295,6 +309,8 @@ def get_text_witch(screen, input_text, error_text, screen_dim, game_variables):
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 if input_text == "save":
+                    return input_text, True
+                if input_text == "nothing":
                     return input_text, True
                 player_name = input_text
                 if player_name in game_variables.active_player_names:
