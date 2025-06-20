@@ -174,7 +174,8 @@ class Play:
             INPUT = True
             while INPUT:
                 attack_player_name = self.get_valid_input("Which player do you want to attack? (Enter player name): ", str)
-                if attack_player_name in self.active_players:
+                p_index = self.name2index(attack_player_name)
+                if self.active_player_roles[p_index] != None:
                     INPUT = False
                 else:
                     print("\nPlease enter a valid player name...")
