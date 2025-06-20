@@ -184,5 +184,15 @@ def get_texts():
         )
     )
 
+    # 22
+    title_font = pygame.font.Font(None, 70)
+    text_objects.append(
+        title_font.render(
+            "The village is awake: Day phase",
+            True,
+            "Yellow",
+        )
+    )
+
 
     return text_objects
