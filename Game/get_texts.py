@@ -211,5 +211,24 @@ def get_texts():
             "Black",
         )
     )
+    # 25
+    title_font = pygame.font.Font(None, 70)
+    text_objects.append(
+        title_font.render(
+            "Enter the person that will try to escape the bullet:",
+            True,
+            "Red",
+        )
+    )
+
+    # 26
+    title_font = pygame.font.Font(None, 70)
+    text_objects.append(
+        title_font.render(
+            "The hunter tries to snipe someone",
+            True,
+            "Red",
+        )
+    )
 
     return text_objects

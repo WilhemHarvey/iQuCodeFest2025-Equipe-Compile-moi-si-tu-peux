@@ -270,7 +270,7 @@ while True:
                 killed_player_roles = []
                 for player in killed_players:
                     killed_player_roles.append(og_roles[player])
-                    killed_player_names.append(game_variables.ind2name(player))
+                    killed_player_names.append(game_variables.ind2name[player])
 
                 game_variables.player_roles = new_roles
                 kills_done=True
@@ -289,8 +289,13 @@ while True:
                     exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
-                        day_phase_step += 1
-                        input_text = ""
+                        if "Hunter" in killed_player_roles:
+                            day_phase_step=3
+                            next_step=1
+
+                        else:
+                            day_phase_step += 1
+                    input_text = ""
         elif day_phase_step == 1:
             input_text, player_chosen = day_functions.vote(
                 screen,
@@ -309,8 +314,13 @@ while True:
                     killed_player_roles = [og_roles[input_text]]
                     killed_player_names = [game_variables.ind2name[input_text]]
                     game_variables.player_roles = new_roles
+                
+                if "Hunter" in killed_player_roles:
+                    day_phase_step=3
+                    next_step=5
 
-                day_phase_step += 1
+                else:
+                    day_phase_step = 5
 
 
                 endangered_player = game_variables.ind2name[input_text]
@@ -333,7 +343,41 @@ while True:
                     if event.key == pygame.K_RETURN:
                         day_phase_step += 1
                         input_text = ""
+        elif day_phase_step == 3:
+            input_text, player_chosen = night_functions.werewolf(
+                screen,
+                input_text,
+                image_objects,
+                text_objects,
+                screen_dim,
+                game_variables,
+            )
+            if player_chosen == True:
+                endangered_player = game_variables.ind2name[input_text]
+                day_object.hunter(input_text)
+                day_phase_step +=1
+                
+                input_text = ""   
+
+        elif day_phase_step == 4:
+            day_functions.vote_results(
+                screen,
+                image_objects,
+                text_objects,
+                screen_dim,
+                killed_player_roles,
+                killed_player_names,
+            )
             
+            for event in pygame.event.get():
+                if event.type == pygame.quit:
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        day_phase_step += 1
+                        input_text = ""
+
         else:
             pass
 
