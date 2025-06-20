@@ -30,5 +30,5 @@ def get_images():
     # 12
     images_objects.append(pygame.image.load("Game/day_phase/sun.png"))
     # 13
-    images_objects.append(pygame.image.load("Game/day_phase/campfire.png"))
+    images_objects.append(pygame.image.load("Game/day_phase/campfire.webp"))
     return images_objects
