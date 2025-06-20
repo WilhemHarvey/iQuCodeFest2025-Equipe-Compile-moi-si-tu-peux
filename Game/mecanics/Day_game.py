@@ -53,7 +53,7 @@ class Day:
         self.endangered_players = endangered_players
         self.couple = couple
 
-    def night_measures(self):   
+    def night_measures(self):
 
         res_bitstring = run_circuit(self.night_circuit)
 
