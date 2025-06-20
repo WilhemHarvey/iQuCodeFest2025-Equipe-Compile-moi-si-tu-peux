@@ -261,7 +261,11 @@ while True:
     elif game_step == 6:
         screen.fill((135, 206, 235))
         if day_phase_step == 0:
-            pass
+            killed_players, new_roles = day_object.night_measures()
+        killed_player_names = []
+        for player in killed_players:
+            killed_player_names.append(game_variables.ind2name(player))
+        game_variables.player_roles = new_roles
 
     pygame.display.update()
     clock.tick(60)
