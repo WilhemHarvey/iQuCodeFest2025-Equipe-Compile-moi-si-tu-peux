@@ -12,11 +12,11 @@ def vote(
     screen_dim,
     game_variables,
 ):
-    moon = image_objects[11]
-    moon = pygame.transform.scale(moon, (screen_dim[0] / 8, screen_dim[1] / 8))
-    screen.blit(moon, (7 * screen_dim[0] / 8, 1 * screen_dim[1] / 64))
+    sun = image_objects[12]
+    sun = pygame.transform.scale(sun, (screen_dim[0] / 8, screen_dim[1] / 8))
+    screen.blit(sun, (7 * screen_dim[0] / 8, 1 * screen_dim[1] / 64))
 
-    card = image_objects[3]
+    card = image_objects[13]
     card = pygame.transform.scale(card, (screen_dim[0] / 3, screen_dim[0] / 3))
 
     screen.blit(
@@ -24,7 +24,7 @@ def vote(
         ((screen_dim[0] / 2) - (card.get_width() / 2), screen_dim[1] / 6),
     )
     # Title
-    title = text_objects[15]
+    title = text_objects[22]
     screen.blit(title, (screen_dim[1] / 16, screen_dim[1] / 16))
 
     # Prompt
