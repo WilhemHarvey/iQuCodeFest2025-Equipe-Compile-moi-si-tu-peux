@@ -245,29 +245,26 @@ class Play:
         for i in dead_players_night :
             dead_players_night_name = self.index2name(i)
             dead_players_night_role = self.active_player_roles[i]
+            self.active_player_roles[i] = None # Mark the player as dead
             
             print(f"\n {dead_players_night_name} was killed as a result of the vote. His role was {dead_players_night_role}.")
             if dead_players_night_role == "Hunter":
                 INPUT = True
                 while INPUT:
                     hunter_victim_name = self.get_valid_input("Who does the hunter want to kill? (Enter player name): ", str)
-                    if hunter_victim_name in self.active_players:
+                    if self.name2index(hunter_victim_name) != None:
                         INPUT = False
                     else:
                         print("\nPlease enter a valid player name...")
-                hunter_victim_index = self.name2index(hunter_victim_name)
-                hunter_victim_role = self.active_player_roles(hunter_victim_index)
+                hunter_victim_role = self.active_player_roles(self.name2index(hunter_victim_index))
                 dead_players, self.active_player_roles = day.hunter(day,hunter_victim_index)
-                print(f"\n {hunter_victim_name} was killed by the hunter. His role was {hunter_victim_role}.")
+                print(f"\n {hunter_victim_name} was attacked by the hunter. His role was {hunter_victim_role}.")
                 if hunter_victim_index in self.couple :
                     hunter_victim_lover_index = [player for player in self.couple if player != hunter_victim_index][0]
                     hunter_victim_lover_role = self.active_player_roles[hunter_victim_lover_index]
                     hunter_victim_lover_name = self.index2name(hunter_victim_lover_index)
                     print(f"\n {hunter_victim_name} was in love with {hunter_victim_lover_name}, which means that{hunter_victim_lover_name} is also dead. His role was {hunter_victim_lover_role}.")
                     self.lover_dead == True
-
-            # Remove the dead players from the active players roles list
-            self.active_player_roles[i] = None
 
 
         voted_player_name = str(
@@ -294,7 +291,9 @@ class Play:
                 hunter_victim_lover_index = [player for player in self.couple if player != hunter_victim_index][0]
                 hunter_victim_lover_name = self.index2name(hunter_victim_lover_name)
                 hunter_victim_lover_role = self.active_player_roles[hunter_victim_lover_index]
+
                 dead_players, self.active_player_roles = day.hunter(day,hunter_victim_index)
+
                 if len(dead_players) == 1 :
                     print(f"\n {hunter_victim_name} was killed by the hunter. His role was {hunter_victim_role}.")
                 elif len(dead_players) == 2 and self.lover_dead == False:
