@@ -1,5 +1,5 @@
 import numpy as np
-from qiskit import QuantumCircuit
+from qiskit import QuantumCircuit, QuantumRegister
 
 
 class Night:
@@ -52,8 +52,13 @@ class Night:
                     lover_index = [player for player in self.in_love if player != attack_player_index][0]
                     attack_qc.rx(self.small_attack/3, lover_index)
                 else :
+
+                    additional_qubit = QuantumRegister(1)
+                    self.qc.add_register(additional_qubit)
+
                     attack_qc = QuantumCircuit(2)
                     attack_qc.rx(self.small_attack/3, 1)
+
                     self.qc.append(attack_qc, [0,1])
                     self.endangered_players.append(attack_player_index)
 
@@ -62,6 +67,9 @@ class Night:
 
             else:
                 raise ValueError("error with attack_player_index")
+            
+            self.witch_ability[1] = False
+
 
         return
     
